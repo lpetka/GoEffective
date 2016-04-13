@@ -3,25 +3,29 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0-alpha5'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
     }
 }
 
-allprojects {
-    repositories {
-        jcenter()
-    }
-}
+subprojects {
+    apply plugin: 'me.tatarka.retrolambda'
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    retrolambda {
+        jdk System.getenv("JAVA8_HOME")
+        oldJdk System.getenv("JAVA7_HOME")
+        javaVersion JavaVersion.VERSION_1_7
+        jvmArgs '-noverify'
+    }
 }
