@@ -1,4 +1,4 @@
-package project.io.goeffective.adapters;
+package project.io.goeffective.widget.adapters;
 
 import android.content.Context;
 import android.view.Gravity;
