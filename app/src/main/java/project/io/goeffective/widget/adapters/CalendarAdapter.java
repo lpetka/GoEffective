@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import project.io.goeffective.R;
-import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.ICalendarModel;
 import project.io.goeffective.models.TaskStatus;
 
@@ -73,25 +72,29 @@ public class CalendarAdapter extends BaseAdapter {
         return model.getTaskStatus(tmpMonth);
     }
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    private int getColor(int itemNumer){
+        TaskStatus status = getTaskStatus(itemNumer);
+        if(status == TaskStatus.DONE){
+            return context.getResources().getColor(R.color.taskDone);
+        } else if (status == TaskStatus.PARTLY_DONE){
+            return context.getResources().getColor(R.color.taskPartlyDone);
+        } else  {
+            return context.getResources().getColor(R.color.taskNotDone);
+        }
+    }
+
+    private TextView createGridItem(String text, int color){
         TextView textView = new TextView(context);
-        textView.setText(getDayNumber(i).toString());
+        textView.setText(text);
         textView.setGravity(Gravity.CENTER);
         textView.setHeight(70);
         textView.setTextSize(20);
-        TaskStatus status = getTaskStatus(i);
-        int color;
-        if(status == TaskStatus.DONE){
-            color = context.getResources().getColor(R.color.taskDone);
-        } else if (status == TaskStatus.PARTLY_DONE){
-            color = context.getResources().getColor(R.color.taskPartlyDone);
-        } else  {
-            color = context.getResources().getColor(R.color.taskNotDone);
-        }
         textView.setBackgroundColor(color);
-
-
         return textView;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        return createGridItem(getDayNumber(i).toString(), getColor(i));
     }
 }

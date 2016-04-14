@@ -18,6 +18,7 @@ import java.util.Calendar;
 import project.io.goeffective.R;
 import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.ICalendarModel;
+import project.io.goeffective.models.TaskStatus;
 import project.io.goeffective.widget.adapters.CalendarAdapter;
 
 public class CalendarView extends LinearLayout implements ICalendarChanger {
@@ -92,27 +93,39 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
     }
 
     private void addMonth(){
+
         LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(HORIZONTAL);
+        //linearLayout.setOrientation(HORIZONTAL);
+        linearLayout.setLayoutParams(
+                new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        );
         this.addView(linearLayout);
+
 
         Button prev = new Button(context);
         prev.setText("<");
         prev.setTextSize(25);
+        prev.setLayoutParams(
+                new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.1f)
+        );
         prev.setOnClickListener(new ClickListener(this, false));
         linearLayout.addView(prev);
 
 
         monthTextView = new TextView(context);
         monthTextView.setTextSize(25);
+        monthTextView.setGravity(Gravity.CENTER);
         monthTextView.setLayoutParams(
-                new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.8f)
         );
         linearLayout.addView(monthTextView);
 
         Button next = new Button(context);
         next.setText(">");
         next.setTextSize(25);
+        next.setLayoutParams(
+                new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.1f)
+        );
         next.setOnClickListener(new ClickListener(this, true));
         linearLayout.addView(next);
     }
