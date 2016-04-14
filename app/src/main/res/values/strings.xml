@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">GoEffective</string>
     <string name="toast_hello_world">Hello World!</string>
+    <string name="task_name_hint">Task name</string>
+    <string name="reminder_switch">Reminder</string>
+    <string-array name="week_days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>
