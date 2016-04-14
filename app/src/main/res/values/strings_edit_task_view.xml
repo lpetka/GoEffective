@@ -1,0 +1,5 @@
+<resources>
+    <string name="input_task_name_hint">Nazwa zadania</string>
+    <string name="switch_reminder_label">Przypomniene</string>
+    <string name="input_task_note_hint">Dodaj notatkę</string>
+</resources>
