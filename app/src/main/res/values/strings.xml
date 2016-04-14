@@ -15,4 +15,5 @@
     <string name="task_note_hint">Add note</string>
     <string name="title_activity_day">DayActivity</string>
     <string name="notifications_setting">Notifications</string>
+    <string name="clear_user_data_button_text">Clear user data</string>
 </resources>
