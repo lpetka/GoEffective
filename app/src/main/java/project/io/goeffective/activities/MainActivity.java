@@ -23,6 +23,9 @@ public class MainActivity extends BaseActivity implements IMainView {
     @InjectView(R.id.main_activity_calendar_button)
     Button openCalendarActivityButton;
 
+    @InjectView(R.id.main_activity_preferences_button)
+    Button openPreferencesActivityButton;
+
     public MainActivity() {
         super(R.layout.activity_main);
     }
@@ -45,5 +48,10 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Override
     public Observable openCalendarActivityClick() {
         return ViewObservable.clicks(openCalendarActivityButton);
+    }
+
+    @Override
+    public Observable openPreferencesActivityClick() {
+        return ViewObservable.clicks(openPreferencesActivityButton);
     }
 }
