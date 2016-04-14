@@ -31,7 +31,7 @@
         android:showText="false" />
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/week_day_list_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
