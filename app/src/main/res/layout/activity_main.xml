@@ -41,7 +41,6 @@
         android:text="Preferencje"
         android:layout_below="@id/main_activity_calendar_button"
         android:id="@+id/main_activity_preferences_button"
-        android:layout_below="@+id/button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -50,7 +49,7 @@
         android:layout_height="wrap_content"
         android:text="Dodaj zadanie"
         android:id="@+id/add_task_button"
-        android:layout_below="@+id/main_activity_calendar_button"
+        android:layout_below="@+id/main_activity_preferences_button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

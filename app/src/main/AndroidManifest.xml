@@ -16,9 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.CalendarActivity" />
-        <activity android:name=".activities.AddTaskActivity"></activity>
-        <activity android:name=".activities.CalendarActivity" />
-        <activity android:name=".activities.PreferencesActivity"></activity>
+        <activity android:name=".activities.AddTaskActivity"/>
+        <activity android:name=".activities.PreferencesActivity"/>
     </application>
 
 </manifest>
