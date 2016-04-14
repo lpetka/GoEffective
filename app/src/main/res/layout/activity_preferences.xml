@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/show_notifications_switch"
-        android:id="@+id/show_notifications_switch"
+        android:id="@+id/reminder_switch"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:checked="true" />
@@ -23,6 +23,6 @@
         android:layout_height="wrap_content"
         android:text="@string/clear_user_data_button"
         android:id="@+id/clear_user_data_button"
-        android:layout_below="@+id/show_notifications_switch"
+        android:layout_below="@+id/reminder_switch"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
