@@ -14,4 +14,6 @@
     </string-array>
     <string name="task_note_hint">Add note</string>
     <string name="title_activity_day">DayActivity</string>
+    <string name="notifications_setting">Notifications</string>
+    <string name="toast_hello_world">Brawo! Nie opuściłeś żadnej aktywności od 3 dni!</string>
 </resources>

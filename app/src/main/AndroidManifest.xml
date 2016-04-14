@@ -17,6 +17,8 @@
         </activity>
         <activity android:name=".activities.CalendarActivity" />
         <activity android:name=".activities.AddTaskActivity"></activity>
+        <activity android:name=".activities.CalendarActivity" />
+        <activity android:name=".activities.PreferencesActivity"></activity>
     </application>
 
 </manifest>

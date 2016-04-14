@@ -26,6 +26,9 @@ public class MainActivity extends BaseActivity implements IMainView {
     @InjectView(R.id.add_task_button)
     Button openAddTaskActivityButton;
 
+    @InjectView(R.id.main_activity_preferences_button)
+    Button openPreferencesActivityButton;
+
     public MainActivity() {
         super(R.layout.activity_main);
     }
@@ -53,5 +56,10 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Override
     public Observable openAddTaskActivityClick() {
         return ViewObservable.clicks(openAddTaskActivityButton);
+    }
+
+    @Override
+    public Observable openPreferencesActivityClick() {
+        return ViewObservable.clicks(openPreferencesActivityButton);
     }
 }
