@@ -1,6 +1,9 @@
 package project.io.goeffective.widget.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +12,32 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
+import project.io.goeffective.R;
+import project.io.goeffective.models.CalendarModel;
+import project.io.goeffective.models.ICalendarModel;
+import project.io.goeffective.models.TaskStatus;
+
 public class CalendarAdapter extends BaseAdapter {
     private Integer day_of_week;
     private Integer days_last_month;
     private Integer days_current_month;
     private final Integer DAYS_PER_WEEK = 7;
     private Context context;
+    private ICalendarModel model;
+    private Calendar currentMonth;
 
-    public CalendarAdapter(Context context, Calendar month){
+    public CalendarAdapter(Context context, Calendar month, ICalendarModel model){
         this.context = context;
+        this.model = model;
+        this.currentMonth = month;
+
         month.set(Calendar.DAY_OF_MONTH, 1);
         day_of_week = month.get(Calendar.DAY_OF_WEEK) - Calendar.MONDAY - 1;
         Calendar last_month = (Calendar) month.clone();
         last_month.add(Calendar.MONTH, -1);
         days_last_month = last_month.getActualMaximum(Calendar.DAY_OF_MONTH);
         days_current_month = month.getActualMaximum(Calendar.DAY_OF_MONTH);
+        currentMonth.set(Calendar.DAY_OF_MONTH, 1);
     }
 
     @Override
@@ -51,6 +65,14 @@ public class CalendarAdapter extends BaseAdapter {
         }
     }
 
+    private TaskStatus getTaskStatus(int itemNumber){
+        Calendar tmpMonth = (Calendar) currentMonth.clone();
+        int currentDay = -DAYS_PER_WEEK - day_of_week + itemNumber;
+        tmpMonth.add(Calendar.DATE, currentDay);
+
+        return model.getTaskStatus(tmpMonth);
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         TextView textView = new TextView(context);
@@ -58,6 +80,18 @@ public class CalendarAdapter extends BaseAdapter {
         textView.setGravity(Gravity.CENTER);
         textView.setHeight(70);
         textView.setTextSize(20);
+        TaskStatus status = getTaskStatus(i);
+        int color;
+        if(status == TaskStatus.DONE){
+            color = context.getResources().getColor(R.color.taskDone);
+        } else if (status == TaskStatus.PARTLY_DONE){
+            color = context.getResources().getColor(R.color.taskPartlyDone);
+        } else  {
+            color = context.getResources().getColor(R.color.taskNotDone);
+        }
+        textView.setBackgroundColor(color);
+
+
         return textView;
     }
 }

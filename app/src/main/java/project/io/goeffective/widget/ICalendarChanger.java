@@ -1,6 +1,6 @@
 package project.io.goeffective.widget;
 
-public interface CalendarChanger {
+public interface ICalendarChanger {
     void nextMonth();
     void prevMonth();
 }

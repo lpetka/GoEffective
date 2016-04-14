@@ -16,9 +16,11 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import project.io.goeffective.R;
+import project.io.goeffective.models.CalendarModel;
+import project.io.goeffective.models.ICalendarModel;
 import project.io.goeffective.widget.adapters.CalendarAdapter;
 
-public class CalendarView extends LinearLayout implements CalendarChanger{
+public class CalendarView extends LinearLayout implements ICalendarChanger {
     private Context context;
     private final Integer DAYS_OF_WEEK = 7;
     private Integer dayOffset = 0;
@@ -30,6 +32,8 @@ public class CalendarView extends LinearLayout implements CalendarChanger{
     private GridView gridView;
     private Calendar cal = Calendar.getInstance();
     private TextView monthTextView;
+
+    private ICalendarModel model = new CalendarModel();
 
     public CalendarView(Context context) {
         super(context);
@@ -71,18 +75,18 @@ public class CalendarView extends LinearLayout implements CalendarChanger{
 
     private class ClickListener implements OnClickListener {
         private final boolean moveForward;
-        CalendarChanger calendarChanger;
-        public ClickListener(CalendarChanger calendarChanger, boolean next){
-            this.calendarChanger = calendarChanger;
+        ICalendarChanger ICalendarChanger;
+        public ClickListener(ICalendarChanger ICalendarChanger, boolean next){
+            this.ICalendarChanger = ICalendarChanger;
             this.moveForward = next;
         }
 
         @Override
         public void onClick(View view) {
             if(moveForward){
-                calendarChanger.nextMonth();
+                ICalendarChanger.nextMonth();
             } else {
-                calendarChanger.prevMonth();
+                ICalendarChanger.prevMonth();
             }
         }
     }
@@ -149,7 +153,7 @@ public class CalendarView extends LinearLayout implements CalendarChanger{
 
     private void update(){
         setMonth(cal.get(Calendar.MONTH));
-        CalendarAdapter calendarAdapter = new CalendarAdapter(context, cal);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(context, cal, model);
         gridView.setAdapter(calendarAdapter);
     }
 }
