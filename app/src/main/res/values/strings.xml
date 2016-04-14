@@ -12,4 +12,6 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+    <string name="task_note_hint">Add note</string>
+    <string name="title_activity_day">DayActivity</string>
 </resources>
