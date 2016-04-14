@@ -10,7 +10,7 @@
     tools:context="project.io.goeffective.activities.AddTaskActivity">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/task_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -23,7 +23,7 @@
         android:id="@+id/show_notifications_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/task_name_input"
         android:layout_centerHorizontal="true"
         android:checked="false"
         android:text="@string/reminder_switch"
