@@ -23,11 +23,9 @@ public class Presenter<PView> implements IPresenter{
         if(this.childPresenter != null) {
             this.childPresenter.start();
         }
-
         for (Action1 action : this.startupActions) {
             action.call(null);
         }
-
     }
 
     @Override

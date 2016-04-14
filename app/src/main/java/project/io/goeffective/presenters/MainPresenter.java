@@ -20,5 +20,8 @@ public class MainPresenter extends Presenter<IMainView> {
         this.subscriptions.add(view.showHelloWorldToastClick().observeOn(uiThread).subscribe(o -> {
             view.showMessage();
         }));
+        this.subscriptions.add(view.openCalendarActivityClick().observeOn(uiThread).subscribe(o -> {
+            navigator.openCalendarActivity();
+        }));
     }
 }

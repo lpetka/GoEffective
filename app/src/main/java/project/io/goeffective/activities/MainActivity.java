@@ -20,13 +20,16 @@ public class MainActivity extends BaseActivity implements IMainView {
     @InjectView(R.id.button)
     Button openHelloWorldToastButton;
 
+    @InjectView(R.id.main_activity_calendar_button)
+    Button openCalendarActivityButton;
+
     public MainActivity() {
         super(R.layout.activity_main);
     }
 
     @Override
     protected IPresenter createPresenter(BaseActivity baseActivity, Bundle savedInstanceState) {
-        return new MainPresenter(this, AndroidSchedulers.mainThread(), new Navigator());
+        return new MainPresenter(this, AndroidSchedulers.mainThread(), new Navigator(this));
     }
 
     @Override
@@ -37,5 +40,10 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Override
     public void showMessage() {
         Toast.makeText(this, R.string.toast_hello_world, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public Observable openCalendarActivityClick() {
+        return ViewObservable.clicks(openCalendarActivityButton);
     }
 }
