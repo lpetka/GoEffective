@@ -12,7 +12,7 @@
     <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/show_notifications_switch"
+        android:text="@string/switch_show_notifications"
         android:id="@+id/reminder_switch"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -21,7 +21,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/clear_user_data_button"
+        android:text="@string/button_clear_user_data"
         android:id="@+id/clear_user_data_button"
         android:layout_below="@+id/reminder_switch"
         android:layout_centerHorizontal="true" />

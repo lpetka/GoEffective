@@ -1,0 +1,4 @@
+<resources>
+    <string name="switch_show_notifications">Notyfikacje</string>
+    <string name="button_clear_user_data">Wyczyść dane użytkownika</string>
+</resources>

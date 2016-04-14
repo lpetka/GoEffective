@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:hint="@string/task_name_hint"
+        android:hint="@string/input_task_name_hint"
         android:inputType="text"
         android:padding="16dp" />
 
@@ -26,7 +26,7 @@
         android:layout_below="@+id/task_name_input"
         android:layout_centerHorizontal="true"
         android:checked="false"
-        android:text="@string/reminder_switch"
+        android:text="@string/switch_reminder_label"
         android:padding="16dp"
         android:showText="false" />
 
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:hint="@string/task_note_hint"
+        android:hint="@string/input_task_note_hint"
         android:id="@+id/note_input"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
