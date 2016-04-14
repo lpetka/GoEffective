@@ -7,6 +7,7 @@ public interface IMainView {
     Observable showHelloWorldToastClick();
 
     Observable openCalendarActivityClick();
+    Observable openAddTaskActivityClick();
 
     Observable openPreferencesActivityClick();
 

@@ -23,6 +23,9 @@ public class MainPresenter extends Presenter<IMainView> {
         this.subscriptions.add(view.openCalendarActivityClick().observeOn(uiThread).subscribe(o -> {
             navigator.openCalendarActivity();
         }));
+        this.subscriptions.add(view.openAddTaskActivityClick().observeOn(uiThread).subscribe(o -> {
+            navigator.openAddTaskActivity();
+        }));
         this.subscriptions.add(view.openPreferencesActivityClick().observeOn(uiThread).subscribe(o -> {
             navigator.openPreferencesActivity();
         }));
