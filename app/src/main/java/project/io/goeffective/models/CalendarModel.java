@@ -16,6 +16,10 @@ public class CalendarModel implements ICalendarModel{
     public CalendarModel(){}
 
     public TaskStatus getTaskStatus(Calendar calendar){
+        Calendar current = Calendar.getInstance();
+        if(current.compareTo(calendar) < 0){
+            return TaskStatus.FUTURE;
+        }
         int r = random.nextInt(3);
         return t[r];
     }

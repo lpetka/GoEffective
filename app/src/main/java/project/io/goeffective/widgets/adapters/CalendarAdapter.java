@@ -22,9 +22,8 @@ public class CalendarAdapter extends BaseAdapter {
     private ICalendarModel model;
     private Calendar currentMonth;
 
-    public CalendarAdapter(Context context, Calendar month, ICalendarModel model){
+    public CalendarAdapter(Context context, Calendar month){
         this.context = context;
-        this.model = model;
         this.currentMonth = month;
 
         month.set(Calendar.DAY_OF_MONTH, 1);
@@ -34,6 +33,11 @@ public class CalendarAdapter extends BaseAdapter {
         days_last_month = last_month.getActualMaximum(Calendar.DAY_OF_MONTH);
         days_current_month = month.getActualMaximum(Calendar.DAY_OF_MONTH);
         currentMonth.set(Calendar.DAY_OF_MONTH, 1);
+    }
+
+    public CalendarAdapter(Context context, Calendar month, ICalendarModel model){
+        this(context, month);
+        this.model = model;
     }
 
     @Override
@@ -69,11 +73,17 @@ public class CalendarAdapter extends BaseAdapter {
     }
 
     private View.OnClickListener getOnClickListener(int itemNumber){
-        return model.getOnClickListener(context, getDate(itemNumber));
+        if(model != null) {
+            return model.getOnClickListener(context, getDate(itemNumber));
+        }
+        return null;
     }
 
     private TaskStatus getTaskStatus(int itemNumber){
-        return model.getTaskStatus(getDate(itemNumber));
+        if(model != null) {
+            return model.getTaskStatus(getDate(itemNumber));
+        }
+        return TaskStatus.FUTURE;
     }
 
     private int getColor(int itemNumer){
@@ -82,9 +92,10 @@ public class CalendarAdapter extends BaseAdapter {
             return context.getResources().getColor(R.color.taskDone);
         } else if (status == TaskStatus.PARTLY_DONE){
             return context.getResources().getColor(R.color.taskPartlyDone);
-        } else  {
+        } else  if (status == TaskStatus.NOT_DONE){
             return context.getResources().getColor(R.color.taskNotDone);
         }
+        return context.getResources().getColor(R.color.taskFuture);
     }
 
     private TextView createGridItem(String text, int color, View.OnClickListener listener){
