@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import butterknife.InjectView;
 import project.io.goeffective.R;
+import project.io.goeffective.common.BaseActivity;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.MainPresenter;
 import project.io.goeffective.services.Navigator;
