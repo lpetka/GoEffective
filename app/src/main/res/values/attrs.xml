@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CalendarView">
+        <attr name="header_text_size" format="dimension" />
+        <attr name="weekdays_text_size" format="dimension" />
+        <attr name="weekdays_format" format="enum">
+            <enum name="short" value="0"/>
+            <enum name="one_letter" value="1" />
+        </attr>
+        <attr name="calendar_day_spacing" format="dimension" />
+        <attr name="short_months" format="boolean" />
+        <attr name="weeks_quantity" format="integer" />
+    </declare-styleable>
+</resources>
