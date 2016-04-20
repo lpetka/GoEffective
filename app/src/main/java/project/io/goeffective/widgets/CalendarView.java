@@ -33,6 +33,10 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
     private Calendar cal = Calendar.getInstance();
     private TextView monthTextView;
 
+    ///////////Style
+    private final int GRIDVIEW_SPACING = 1;
+
+
     private ICalendarModel model = new CalendarModel();
 
     public CalendarView(Context context) {
@@ -53,8 +57,6 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
 
     private void setupView(Context context){
         this.context = context;
-
-
         this.setOrientation(VERTICAL);
         addMonth();
         addDaysOfWeek();
@@ -158,6 +160,8 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
                 new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         );
         gridView.setNumColumns(DAYS_OF_WEEK);
+        gridView.setHorizontalSpacing(GRIDVIEW_SPACING);
+        gridView.setVerticalSpacing(GRIDVIEW_SPACING);
         this.addView(gridView);
         update();
     }
