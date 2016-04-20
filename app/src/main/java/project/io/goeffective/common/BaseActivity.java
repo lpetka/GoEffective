@@ -1,8 +1,7 @@
-package project.io.goeffective.activities;
+package project.io.goeffective.common;
 
 import android.app.Activity;
 import android.os.Bundle;
-
 import butterknife.ButterKnife;
 import project.io.goeffective.presenters.IPresenter;
 import rx.subscriptions.CompositeSubscription;
