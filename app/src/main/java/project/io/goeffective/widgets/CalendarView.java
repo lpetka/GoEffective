@@ -25,11 +25,8 @@ public class CalendarView extends LinearLayout implements ICalendarChanger, ICal
     private Context context;
     private final Integer DAYS_OF_WEEK = 7;
     private Integer dayOffset = 0;
-    private final String[] dayName = new String[]{"Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nie"};
-    private int[] monthId = new int[]{
-            R.string.jan, R.string.feb, R.string.mar, R.string.apr, R.string.may, R.string.jun,
-            R.string.jul, R.string.aug, R.string.sep, R.string.oct, R.string.nov, R.string.dec
-    };
+    private final String[] dayName = getResources().getStringArray(R.array.short_week_days);
+    private final String[] monthName = getResources().getStringArray(R.array.months);
     private GridView gridView;
     private Calendar cal = Calendar.getInstance();
     private TextView monthTextView;
@@ -149,8 +146,7 @@ public class CalendarView extends LinearLayout implements ICalendarChanger, ICal
     }
 
     private void setMonth(int month){
-        String monthName = getResources().getString(monthId[month]);
-        monthTextView.setText(monthName);
+        monthTextView.setText(monthName[month]);
     }
 
     private void addDaysOfWeek(){
