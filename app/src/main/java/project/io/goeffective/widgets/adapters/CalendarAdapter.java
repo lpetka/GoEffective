@@ -61,12 +61,19 @@ public class CalendarAdapter extends BaseAdapter {
         }
     }
 
-    private TaskStatus getTaskStatus(int itemNumber){
+    private Calendar getDate(int itemNumber){
         Calendar tmpMonth = (Calendar) currentMonth.clone();
         int currentDay = -DAYS_PER_WEEK - day_of_week + itemNumber;
         tmpMonth.add(Calendar.DATE, currentDay);
+        return tmpMonth;
+    }
 
-        return model.getTaskStatus(tmpMonth);
+    private View.OnClickListener getOnClickListener(int itemNumber){
+        return model.getOnClickListener(context, getDate(itemNumber));
+    }
+
+    private TaskStatus getTaskStatus(int itemNumber){
+        return model.getTaskStatus(getDate(itemNumber));
     }
 
     private int getColor(int itemNumer){
@@ -80,18 +87,19 @@ public class CalendarAdapter extends BaseAdapter {
         }
     }
 
-    private TextView createGridItem(String text, int color){
+    private TextView createGridItem(String text, int color, View.OnClickListener listener){
         TextView textView = new TextView(context);
         textView.setText(text);
         textView.setGravity(Gravity.CENTER);
         textView.setHeight(70);
         textView.setTextSize(20);
         textView.setBackgroundColor(color);
+        textView.setOnClickListener(listener);
         return textView;
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        return createGridItem(getDayNumber(i).toString(), getColor(i));
+        return createGridItem(getDayNumber(i).toString(), getColor(i), getOnClickListener(i));
     }
 }
