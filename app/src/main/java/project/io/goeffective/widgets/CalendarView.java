@@ -19,8 +19,9 @@ import project.io.goeffective.R;
 import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.ICalendarModel;
 import project.io.goeffective.widgets.adapters.CalendarAdapter;
+import project.io.goeffective.widgets.events.OnMonthChangeListener;
 
-public class CalendarView extends LinearLayout implements ICalendarChanger {
+public class CalendarView extends LinearLayout implements ICalendarChanger, ICalendarWidget {
     private Context context;
     private final Integer DAYS_OF_WEEK = 7;
     private Integer dayOffset = 0;
@@ -33,16 +34,15 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
     private Calendar cal = Calendar.getInstance();
     private TextView monthTextView;
 
+    private ICalendarModel model = new CalendarModel();
+    private OnMonthChangeListener monthChangeListener;
+
     ///////////Style
     private final int GRIDVIEW_SPACING = 1;
-
-
-    private ICalendarModel model = new CalendarModel();
 
     public CalendarView(Context context) {
         super(context);
         setupView(context);
-
     }
 
     public CalendarView(Context context, AttributeSet attrs) {
@@ -66,13 +66,30 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
     @Override
     public void nextMonth() {
         cal.add(Calendar.MONTH, 1);
+        if(monthChangeListener != null) {
+            monthChangeListener.onMonthChange(this);
+        }
         update();
     }
 
     @Override
     public void prevMonth() {
         cal.add(Calendar.MONTH, -1);
+        if(monthChangeListener != null) {
+            monthChangeListener.onMonthChange(this);
+        }
         update();
+    }
+
+    @Override
+    public void setModel(ICalendarModel model) {
+        this.model = model;
+        update();
+    }
+
+    @Override
+    public void setOnActionListener(OnMonthChangeListener actionListener) {
+        this.monthChangeListener = actionListener;
     }
 
     private class ClickListener implements OnClickListener {
@@ -165,7 +182,6 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
         this.addView(gridView);
         update();
     }
-
 
     private void update(){
         setMonth(cal.get(Calendar.MONTH));
