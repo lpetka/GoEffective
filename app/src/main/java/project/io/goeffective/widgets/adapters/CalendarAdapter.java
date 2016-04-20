@@ -21,10 +21,12 @@ public class CalendarAdapter extends BaseAdapter {
     private Context context;
     private ICalendarModel model;
     private Calendar currentMonth;
+    private final String[] shortMonthNames;
 
     public CalendarAdapter(Context context, Calendar month){
         this.context = context;
         this.currentMonth = month;
+        this.shortMonthNames = context.getResources().getStringArray(R.array.short_months);
 
         month.set(Calendar.DAY_OF_MONTH, 1);
         day_of_week = month.get(Calendar.DAY_OF_WEEK) - Calendar.MONDAY - 1;
@@ -109,8 +111,20 @@ public class CalendarAdapter extends BaseAdapter {
         return textView;
     }
 
+    private String getText(int itemNumber){
+        Integer day = getDayNumber(itemNumber);
+        if(day == 1){
+            Calendar calendar = getDate(itemNumber);
+            int month = calendar.get(Calendar.MONTH);
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(this.shortMonthNames[month]).append(" ").append(day);
+            return stringBuffer.toString();
+        }
+        return day.toString();
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        return createGridItem(getDayNumber(i).toString(), getColor(i), getOnClickListener(i));
+        return createGridItem(getText(i), getColor(i), getOnClickListener(i));
     }
 }
