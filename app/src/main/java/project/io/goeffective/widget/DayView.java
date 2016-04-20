@@ -2,42 +2,22 @@ package project.io.goeffective.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.ListView;
 
-import java.util.Calendar;
+import project.io.goeffective.models.DayModel;
+import project.io.goeffective.models.IDayModel;
+import project.io.goeffective.widget.adapters.DayTaskAdapter;
 
-import project.io.goeffective.R;
-import project.io.goeffective.models.CalendarModel;
-import project.io.goeffective.models.ICalendarModel;
-import project.io.goeffective.widget.adapters.CalendarAdapter;
-
-public class DayView extends LinearLayout implements ICalendarChanger {
+public class DayView extends LinearLayout {
     private Context context;
-    private final Integer DAYS_OF_WEEK = 7;
-    private Integer dayOffset = 0;
-    private final String[] dayName = new String[]{"Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nie"};
-    private int[] monthId = new int[]{
-            R.string.jan, R.string.feb, R.string.mar, R.string.apr, R.string.may, R.string.jun,
-            R.string.jul, R.string.aug, R.string.sep, R.string.oct, R.string.nov, R.string.dec
-    };
-    private GridView gridView;
-    private Calendar cal = Calendar.getInstance();
-    private TextView monthTextView;
-
-    private ICalendarModel model = new CalendarModel();
+    ListView taskListView;
+    private IDayModel model = new DayModel();
 
     public DayView(Context context) {
         super(context);
         setupView(context);
-
     }
 
     public DayView(Context context, AttributeSet attrs) {
@@ -50,121 +30,28 @@ public class DayView extends LinearLayout implements ICalendarChanger {
         setupView(context);
     }
 
-    private void setupView(Context context){
+    private void setupView(Context context) {
         this.context = context;
-
-
         this.setOrientation(VERTICAL);
-        addMonth();
-        addDaysOfWeek();
-        addGridCalendar();
+        addTasksList();
     }
 
-    @Override
-    public void nextMonth() {
-        cal.add(Calendar.MONTH, 1);
-        update();
-    }
-
-    @Override
-    public void prevMonth() {
-        cal.add(Calendar.MONTH, -1);
-        update();
-    }
-
-    private class ClickListener implements OnClickListener {
-        private final boolean moveForward;
-        ICalendarChanger ICalendarChanger;
-        public ClickListener(ICalendarChanger ICalendarChanger, boolean next){
-            this.ICalendarChanger = ICalendarChanger;
-            this.moveForward = next;
-        }
-
-        @Override
-        public void onClick(View view) {
-            if(moveForward){
-                ICalendarChanger.nextMonth();
-            } else {
-                ICalendarChanger.prevMonth();
-            }
-        }
-    }
-
-    private void addMonth(){
-
+    private void addTasksList() {
         LinearLayout linearLayout = new LinearLayout(context);
-        //linearLayout.setOrientation(HORIZONTAL);
         linearLayout.setLayoutParams(
                 new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         );
         this.addView(linearLayout);
 
-
-        Button prev = new Button(context);
-        prev.setText("<");
-        prev.setTextSize(25);
-        prev.setLayoutParams(
-                new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.1f)
-        );
-        prev.setOnClickListener(new ClickListener(this, false));
-        linearLayout.addView(prev);
-
-
-        monthTextView = new TextView(context);
-        monthTextView.setTextSize(25);
-        monthTextView.setGravity(Gravity.CENTER);
-        monthTextView.setLayoutParams(
-                new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.8f)
-        );
-        linearLayout.addView(monthTextView);
-
-        Button next = new Button(context);
-        next.setText(">");
-        next.setTextSize(25);
-        next.setLayoutParams(
-                new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.1f)
-        );
-        next.setOnClickListener(new ClickListener(this, true));
-        linearLayout.addView(next);
+        taskListView = new ListView(context);
+        DayTaskAdapter taskAdapter = new DayTaskAdapter(context, model);
+        taskListView.setAdapter(taskAdapter);
+//        prev.setOnClickListener(new ClickListener(this, false)); TODO
+        linearLayout.addView(taskListView);
     }
 
-    private void setMonth(int month){
-        String monthName = getResources().getString(monthId[month]);
-        monthTextView.setText(monthName);
-    }
-
-    private void addDaysOfWeek(){
-        TableLayout tableLayout = new TableLayout(context);
-        tableLayout.setStretchAllColumns(true);
-        tableLayout.setLayoutParams(
-                new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        );
-        TableRow tableRow = new TableRow(context);
-        for(int i = 0; i<DAYS_OF_WEEK; i++){
-            TextView textView = new TextView(context);
-            textView.setText(dayName[i + dayOffset]);
-            textView.setTextSize(15);
-            textView.setGravity(Gravity.CENTER);
-            tableRow.addView(textView);
-        }
-        tableLayout.addView(tableRow);
-        this.addView(tableLayout);
-    }
-
-    private void addGridCalendar(){
-        gridView = new GridView(context);
-        gridView.setLayoutParams(
-                new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        );
-        gridView.setNumColumns(DAYS_OF_WEEK);
-        this.addView(gridView);
-        update();
-    }
-
-
-    private void update(){
-        setMonth(cal.get(Calendar.MONTH));
-        CalendarAdapter calendarAdapter = new CalendarAdapter(context, cal, model);
-        gridView.setAdapter(calendarAdapter);
+    private void update() {
+        DayTaskAdapter taskAdapter = new DayTaskAdapter(context, model);
+        taskListView.setAdapter(taskAdapter);
     }
 }
