@@ -12,7 +12,8 @@ import project.io.goeffective.views.IAddTaskView;
 public class HabitFragment extends BaseFragment implements IAddTaskView {
 
     public HabitFragment() {
-        args.putInt(StringConstants.FRAGMENT_RESOURCE_ID, R.layout.activity_edit_task);
+        args.putInt(StringConstants.FRAGMENT_RESOURCE_ID, R.layout.fragment_edit_task);
+        setArguments(args);
     }
 
     @Override
