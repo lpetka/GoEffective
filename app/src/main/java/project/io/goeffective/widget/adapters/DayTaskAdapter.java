@@ -17,6 +17,7 @@ import project.io.goeffective.models.IDayModel;
 import project.io.goeffective.models.Task;
 
 public class DayTaskAdapter extends BaseAdapter {
+    static int MAX_HISTORY_LENGTH = 5;
     List<Task> tasks;
     private Context context;
 
@@ -78,8 +79,8 @@ public class DayTaskAdapter extends BaseAdapter {
 
         List<Boolean> taskHistory = task.getHistory();
         final int size = taskHistory.size();
-        if (size > 5){
-            taskHistory = taskHistory.subList(size - 5, size);
+        if (size > MAX_HISTORY_LENGTH){
+            taskHistory = taskHistory.subList(size - MAX_HISTORY_LENGTH, size);
         }
         Drawable drawable;
         for (Boolean isTaskDone : taskHistory) {
