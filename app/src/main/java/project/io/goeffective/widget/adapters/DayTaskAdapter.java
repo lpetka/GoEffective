@@ -1,9 +1,12 @@
 package project.io.goeffective.widget.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,42 +50,79 @@ public class DayTaskAdapter extends BaseAdapter {
     private View createListItem(Task task) {
         RelativeLayout layout = new RelativeLayout(context);
 
-        final String taskName = task.getName();
-        View taskNameView = createTaskNameView(taskName);
+        View taskNameView = createTaskNameView(task);
+        RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        taskNameView.setLayoutParams(leftParams);
         layout.addView(taskNameView);
 
-        final List<Boolean> taskHistory = task.getHistory();
-        View taskProgressView = createTaskProgressView(taskHistory);
-        layout.addView(taskProgressView);
+        LinearLayout linearLayout = new LinearLayout(context);
+        RelativeLayout.LayoutParams rightParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+        linearLayout.setLayoutParams(rightParams);
 
+        View taskDaysInARowView = createTaskDaysInARowView(task);
+        linearLayout.addView(taskDaysInARowView);
+
+        View taskProgressView = createTaskProgressView(task);
+        linearLayout.addView(taskProgressView);
+
+        layout.addView(linearLayout);
         return layout;
     }
 
-    private View createTaskNameView(String taskName) {
-        TextView textView = new TextView(context);
-        textView.setText(taskName);
+    private View createTaskProgressView(Task task) {
+        LinearLayout linearLayout = new LinearLayout(context);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        textView.setLayoutParams(params);
+        List<Boolean> taskHistory = task.getHistory();
+        final int size = taskHistory.size();
+        if (size > 5){
+            taskHistory = taskHistory.subList(size - 5, size);
+        }
+        Drawable drawable;
+        for (Boolean isTaskDone : taskHistory) {
+            if (isTaskDone) {
+                drawable = context.getResources().getDrawable(R.drawable.day_task_done);
+            } else {
+                drawable = context.getResources().getDrawable(R.drawable.day_task_not_done);
+            }
+            ImageView imageView = new ImageView(context);
+            imageView.setImageDrawable(drawable);
+            linearLayout.addView(imageView);
+        }
+
+        return linearLayout;
+    }
+
+    private View createTaskNameView(Task task) {
+        TextView textView = new TextView(context);
+        final String taskName = task.getName();
+        textView.setText(taskName);
         return textView;
     }
 
-    private View createTaskProgressView(List<Boolean> taskHistory) {
+    private View createTaskDaysInARowView(Task task) {
         TextView textView = new TextView(context);
-        final String historyLengthLabel = Integer.toString(taskHistory.size());
+
+        String historyLengthLabel = getDaysInARowLabel(task);
         textView.setText(historyLengthLabel);
-
-        final int color = context.getResources().getColor(R.color.taskDone);
-        textView.setHeight(70);
-        textView.setTextSize(20);
-        textView.setBackgroundColor(color);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-        textView.setLayoutParams(params);
         return textView;
+    }
+
+    private String getDaysInARowLabel(Task task) {
+        final int daysInARow = task.countDaysInARow();
+        String historyLengthLabel = "";
+        if (daysInARow > 0) {
+            historyLengthLabel = Integer.toString(daysInARow);
+        }
+        return historyLengthLabel;
+    }
+
+    public void toggle(int i) {
+        Task task = (Task) getItem(i);
+        task.toggle();
+        notifyDataSetChanged();
     }
 }

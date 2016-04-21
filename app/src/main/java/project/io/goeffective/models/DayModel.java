@@ -27,7 +27,7 @@ public class DayModel implements IDayModel {
         List<Boolean> randomHistory = new LinkedList<>();
         int historyLength = random.nextInt(10) + 1;
         for (int j = 0; j < historyLength; j++) {
-            randomHistory.add(random.nextBoolean());
+            randomHistory.add(random.nextInt(5) != 0);
         }
         return randomHistory;
     }

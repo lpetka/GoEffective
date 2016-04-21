@@ -24,4 +24,22 @@ public class Task {
     public List<Boolean> getHistory() {
         return history;
     }
+
+    public void toggle() {
+        final int size = history.size();
+        Boolean lastDayHistory = history.get(size - 1);
+        history.set(size - 1, !lastDayHistory);
+    }
+
+    public int countDaysInARow() {
+        int daysInARow = 0;
+        for (Boolean isTaskCompleted : history) {
+            if (isTaskCompleted) {
+                daysInARow += 1;
+            } else {
+                daysInARow = 0;
+            }
+        }
+        return daysInARow;
+    }
 }

@@ -2,12 +2,15 @@ package project.io.goeffective.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import project.io.goeffective.models.DayModel;
 import project.io.goeffective.models.IDayModel;
+import project.io.goeffective.models.Task;
 import project.io.goeffective.widget.adapters.DayTaskAdapter;
 
 public class DayView extends LinearLayout {
@@ -46,7 +49,7 @@ public class DayView extends LinearLayout {
         taskListView = new ListView(context);
         DayTaskAdapter taskAdapter = new DayTaskAdapter(context, model);
         taskListView.setAdapter(taskAdapter);
-//        prev.setOnClickListener(new ClickListener(this, false)); TODO
+        taskListView.setOnItemClickListener((adapterView, view, i, l) -> taskAdapter.toggle(i));
         linearLayout.addView(taskListView);
     }
 
