@@ -1,34 +1,28 @@
 package project.io.goeffective.activities;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.Toast;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 
 import butterknife.InjectView;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
+import project.io.goeffective.fragments.CalendarFragment;
+import project.io.goeffective.fragments.HabitFragment;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.MainPresenter;
 import project.io.goeffective.services.Navigator;
 import project.io.goeffective.views.IMainView;
-import rx.Observable;
+import project.io.goeffective.widgets.adapters.ViewPagerAdapter;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
-
 
 public class MainActivity extends BaseActivity implements IMainView {
+    @InjectView(R.id.tabs)
+    TabLayout tabLayout;
 
-    @InjectView(R.id.button)
-    Button openHelloWorldToastButton;
+    @InjectView(R.id.viewpager)
+    ViewPager viewPager;
 
-    @InjectView(R.id.main_activity_calendar_button)
-    Button openCalendarActivityButton;
-
-    @InjectView(R.id.add_task_button)
-    Button openAddTaskActivityButton;
-
-    @InjectView(R.id.main_activity_preferences_button)
-    Button openPreferencesActivityButton;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -40,27 +34,15 @@ public class MainActivity extends BaseActivity implements IMainView {
     }
 
     @Override
-    public Observable showHelloWorldToastClick() {
-        return ViewObservable.clicks(openHelloWorldToastButton);
+    protected void onViewReady() {
+        setupViewPager();
+        tabLayout.setupWithViewPager(viewPager);
     }
 
-    @Override
-    public void showMessage() {
-        Toast.makeText(this, R.string.toast_hello_world, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public Observable openCalendarActivityClick() {
-        return ViewObservable.clicks(openCalendarActivityButton);
-    }
-
-    @Override
-    public Observable openAddTaskActivityClick() {
-        return ViewObservable.clicks(openAddTaskActivityButton);
-    }
-
-    @Override
-    public Observable openPreferencesActivityClick() {
-        return ViewObservable.clicks(openPreferencesActivityButton);
+    private void setupViewPager() {
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(new CalendarFragment(), "Kalendarz");
+        viewPagerAdapter.addFragment(new HabitFragment(), "Nawyki");
+        viewPager.setAdapter(viewPagerAdapter);
     }
 }
