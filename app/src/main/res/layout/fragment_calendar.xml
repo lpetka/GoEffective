@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="project.io.goeffective.activities.CalendarActivity">
-    <project.io.goeffective.widget.CalendarView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    tools:context="">
+
 </LinearLayout>

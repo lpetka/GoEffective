@@ -1,4 +1,4 @@
-package project.io.goeffective.widget;
+package project.io.goeffective.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -18,8 +18,7 @@ import java.util.Calendar;
 import project.io.goeffective.R;
 import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.ICalendarModel;
-import project.io.goeffective.models.TaskStatus;
-import project.io.goeffective.widget.adapters.CalendarAdapter;
+import project.io.goeffective.widgets.adapters.CalendarAdapter;
 
 public class CalendarView extends LinearLayout implements ICalendarChanger {
     private Context context;

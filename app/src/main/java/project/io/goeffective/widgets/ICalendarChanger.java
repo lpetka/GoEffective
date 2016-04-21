@@ -1,4 +1,4 @@
-package project.io.goeffective.widget;
+package project.io.goeffective.widgets;
 
 public interface ICalendarChanger {
     void nextMonth();
