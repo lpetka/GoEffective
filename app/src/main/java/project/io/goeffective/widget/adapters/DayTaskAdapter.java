@@ -2,6 +2,7 @@ package project.io.goeffective.widget.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -61,9 +62,10 @@ public class DayTaskAdapter extends BaseAdapter {
 
         LinearLayout linearLayout = new LinearLayout(context);
         RelativeLayout.LayoutParams rightParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         linearLayout.setLayoutParams(rightParams);
+        linearLayout.setGravity(Gravity.CENTER);
 
         View taskProgressView = createTaskProgressView(task);
         linearLayout.addView(taskProgressView);
