@@ -1,4 +1,4 @@
-package project.io.goeffective.widget.events;
+package project.io.goeffective.widgets.events;
 
 import android.view.View;
 
