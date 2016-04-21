@@ -50,6 +50,7 @@ public class DayTaskAdapter extends BaseAdapter {
 
     private View createListItem(Task task) {
         RelativeLayout layout = new RelativeLayout(context);
+        layout.setPadding(16, 16, 16, 16);
 
         View taskNameView = createTaskNameView(task);
         RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(
@@ -79,7 +80,7 @@ public class DayTaskAdapter extends BaseAdapter {
 
         List<Boolean> taskHistory = task.getHistory();
         final int size = taskHistory.size();
-        if (size > MAX_HISTORY_LENGTH){
+        if (size > MAX_HISTORY_LENGTH) {
             taskHistory = taskHistory.subList(size - MAX_HISTORY_LENGTH, size);
         }
         Drawable drawable;
@@ -101,6 +102,7 @@ public class DayTaskAdapter extends BaseAdapter {
         TextView textView = new TextView(context);
         final String taskName = task.getName();
         textView.setText(taskName);
+        textView.setTextSize(24);
         return textView;
     }
 
@@ -109,6 +111,8 @@ public class DayTaskAdapter extends BaseAdapter {
 
         String historyLengthLabel = getDaysInARowLabel(task);
         textView.setText(historyLengthLabel);
+        textView.setTextSize(24);
+        textView.setPadding(16, 0, 16, 0);
         return textView;
     }
 
