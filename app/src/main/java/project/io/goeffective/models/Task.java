@@ -33,13 +33,14 @@ public class Task {
 
     public int countDaysInARow() {
         int daysInARow = 0;
-        for (Boolean isTaskCompleted : history) {
+        for (Boolean isTaskCompleted : history.subList(1, history.size() - 1)) {
             if (isTaskCompleted) {
                 daysInARow += 1;
             } else {
                 daysInARow = 0;
             }
         }
+        daysInARow += history.get(history.size() - 1) ? 1 : 0;
         return daysInARow;
     }
 }
