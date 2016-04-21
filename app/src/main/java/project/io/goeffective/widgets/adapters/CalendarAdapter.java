@@ -21,11 +21,12 @@ public class CalendarAdapter extends BaseAdapter {
     private Context context;
     private ICalendarModel model;
     private Calendar currentMonth;
+    private final String[] shortMonthNames;
 
-    public CalendarAdapter(Context context, Calendar month, ICalendarModel model){
+    public CalendarAdapter(Context context, Calendar month){
         this.context = context;
-        this.model = model;
         this.currentMonth = month;
+        this.shortMonthNames = context.getResources().getStringArray(R.array.short_months);
 
         month.set(Calendar.DAY_OF_MONTH, 1);
         day_of_week = month.get(Calendar.DAY_OF_WEEK) - Calendar.MONDAY - 1;
@@ -34,6 +35,11 @@ public class CalendarAdapter extends BaseAdapter {
         days_last_month = last_month.getActualMaximum(Calendar.DAY_OF_MONTH);
         days_current_month = month.getActualMaximum(Calendar.DAY_OF_MONTH);
         currentMonth.set(Calendar.DAY_OF_MONTH, 1);
+    }
+
+    public CalendarAdapter(Context context, Calendar month, ICalendarModel model){
+        this(context, month);
+        this.model = model;
     }
 
     @Override
@@ -61,12 +67,25 @@ public class CalendarAdapter extends BaseAdapter {
         }
     }
 
-    private TaskStatus getTaskStatus(int itemNumber){
+    private Calendar getDate(int itemNumber){
         Calendar tmpMonth = (Calendar) currentMonth.clone();
         int currentDay = -DAYS_PER_WEEK - day_of_week + itemNumber;
         tmpMonth.add(Calendar.DATE, currentDay);
+        return tmpMonth;
+    }
 
-        return model.getTaskStatus(tmpMonth);
+    private View.OnClickListener getOnClickListener(int itemNumber){
+        if(model != null) {
+            return model.getOnClickListener(context, getDate(itemNumber));
+        }
+        return null;
+    }
+
+    private TaskStatus getTaskStatus(int itemNumber){
+        if(model != null) {
+            return model.getTaskStatus(getDate(itemNumber));
+        }
+        return TaskStatus.FUTURE;
     }
 
     private int getColor(int itemNumer){
@@ -75,23 +94,37 @@ public class CalendarAdapter extends BaseAdapter {
             return context.getResources().getColor(R.color.taskDone);
         } else if (status == TaskStatus.PARTLY_DONE){
             return context.getResources().getColor(R.color.taskPartlyDone);
-        } else  {
+        } else  if (status == TaskStatus.NOT_DONE){
             return context.getResources().getColor(R.color.taskNotDone);
         }
+        return context.getResources().getColor(R.color.taskFuture);
     }
 
-    private TextView createGridItem(String text, int color){
+    private TextView createGridItem(String text, int color, View.OnClickListener listener){
         TextView textView = new TextView(context);
         textView.setText(text);
         textView.setGravity(Gravity.CENTER);
         textView.setHeight(70);
         textView.setTextSize(20);
         textView.setBackgroundColor(color);
+        textView.setOnClickListener(listener);
         return textView;
+    }
+
+    private String getText(int itemNumber){
+        Integer day = getDayNumber(itemNumber);
+        if(day == 1){
+            Calendar calendar = getDate(itemNumber);
+            int month = calendar.get(Calendar.MONTH);
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(this.shortMonthNames[month]).append(" ").append(day);
+            return stringBuffer.toString();
+        }
+        return day.toString();
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        return createGridItem(getDayNumber(i).toString(), getColor(i));
+        return createGridItem(getText(i), getColor(i), getOnClickListener(i));
     }
 }

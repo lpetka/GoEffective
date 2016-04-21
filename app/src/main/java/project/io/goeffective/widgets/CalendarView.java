@@ -19,26 +19,27 @@ import project.io.goeffective.R;
 import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.ICalendarModel;
 import project.io.goeffective.widgets.adapters.CalendarAdapter;
+import project.io.goeffective.widgets.events.OnMonthChangeListener;
 
-public class CalendarView extends LinearLayout implements ICalendarChanger {
+public class CalendarView extends LinearLayout implements ICalendarChanger, ICalendarWidget {
     private Context context;
     private final Integer DAYS_OF_WEEK = 7;
     private Integer dayOffset = 0;
-    private final String[] dayName = new String[]{"Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nie"};
-    private int[] monthId = new int[]{
-            R.string.jan, R.string.feb, R.string.mar, R.string.apr, R.string.may, R.string.jun,
-            R.string.jul, R.string.aug, R.string.sep, R.string.oct, R.string.nov, R.string.dec
-    };
+    private final String[] dayName = getResources().getStringArray(R.array.short_week_days);
+    private final String[] monthName = getResources().getStringArray(R.array.months);
     private GridView gridView;
     private Calendar cal = Calendar.getInstance();
     private TextView monthTextView;
 
     private ICalendarModel model = new CalendarModel();
+    private OnMonthChangeListener monthChangeListener;
+
+    ///////////Style
+    private final int GRIDVIEW_SPACING = 1;
 
     public CalendarView(Context context) {
         super(context);
         setupView(context);
-
     }
 
     public CalendarView(Context context, AttributeSet attrs) {
@@ -53,8 +54,6 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
 
     private void setupView(Context context){
         this.context = context;
-
-
         this.setOrientation(VERTICAL);
         addMonth();
         addDaysOfWeek();
@@ -64,13 +63,30 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
     @Override
     public void nextMonth() {
         cal.add(Calendar.MONTH, 1);
+        if(monthChangeListener != null) {
+            monthChangeListener.onMonthChange(this);
+        }
         update();
     }
 
     @Override
     public void prevMonth() {
         cal.add(Calendar.MONTH, -1);
+        if(monthChangeListener != null) {
+            monthChangeListener.onMonthChange(this);
+        }
         update();
+    }
+
+    @Override
+    public void setModel(ICalendarModel model) {
+        this.model = model;
+        update();
+    }
+
+    @Override
+    public void setOnActionListener(OnMonthChangeListener actionListener) {
+        this.monthChangeListener = actionListener;
     }
 
     private class ClickListener implements OnClickListener {
@@ -130,8 +146,7 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
     }
 
     private void setMonth(int month){
-        String monthName = getResources().getString(monthId[month]);
-        monthTextView.setText(monthName);
+        monthTextView.setText(monthName[month]);
     }
 
     private void addDaysOfWeek(){
@@ -158,10 +173,11 @@ public class CalendarView extends LinearLayout implements ICalendarChanger {
                 new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         );
         gridView.setNumColumns(DAYS_OF_WEEK);
+        gridView.setHorizontalSpacing(GRIDVIEW_SPACING);
+        gridView.setVerticalSpacing(GRIDVIEW_SPACING);
         this.addView(gridView);
         update();
     }
-
 
     private void update(){
         setMonth(cal.get(Calendar.MONTH));
