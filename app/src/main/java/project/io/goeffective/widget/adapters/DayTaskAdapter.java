@@ -65,11 +65,11 @@ public class DayTaskAdapter extends BaseAdapter {
         rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         linearLayout.setLayoutParams(rightParams);
 
-        View taskDaysInARowView = createTaskDaysInARowView(task);
-        linearLayout.addView(taskDaysInARowView);
-
         View taskProgressView = createTaskProgressView(task);
         linearLayout.addView(taskProgressView);
+
+        View taskDaysInARowView = createTaskDaysInARowView(task);
+        linearLayout.addView(taskDaysInARowView);
 
         layout.addView(linearLayout);
         return layout;
@@ -113,6 +113,7 @@ public class DayTaskAdapter extends BaseAdapter {
         textView.setText(historyLengthLabel);
         textView.setTextSize(24);
         textView.setPadding(16, 0, 16, 0);
+        textView.setWidth(70);
         return textView;
     }
 
