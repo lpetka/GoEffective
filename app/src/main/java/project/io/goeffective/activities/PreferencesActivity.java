@@ -3,6 +3,7 @@ package project.io.goeffective.activities;
 import android.os.Bundle;
 
 import project.io.goeffective.R;
+import project.io.goeffective.common.BaseActivity;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.PreferencesPresenter;
 import project.io.goeffective.views.IPreferencesView;

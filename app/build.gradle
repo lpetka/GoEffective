@@ -33,7 +33,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.android.support:support-v4:23.3.0'
 
     //di libraries
     apt 'com.google.dagger:dagger-compiler:2.0.1'

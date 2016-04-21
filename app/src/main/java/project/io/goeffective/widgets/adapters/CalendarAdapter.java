@@ -1,9 +1,6 @@
-package project.io.goeffective.widget.adapters;
+package project.io.goeffective.widgets.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
