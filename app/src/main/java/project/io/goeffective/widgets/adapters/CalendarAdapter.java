@@ -69,7 +69,7 @@ public class CalendarAdapter extends BaseAdapter {
 
     private Calendar getDate(int itemNumber){
         Calendar tmpMonth = (Calendar) currentMonth.clone();
-        int currentDay = -DAYS_PER_WEEK - day_of_week + itemNumber;
+        int currentDay = -DAYS_PER_WEEK - day_of_week + itemNumber - 1; //-1 because current day represented as 1
         tmpMonth.add(Calendar.DATE, currentDay);
         return tmpMonth;
     }
