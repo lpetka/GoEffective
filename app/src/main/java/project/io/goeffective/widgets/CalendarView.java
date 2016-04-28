@@ -31,10 +31,6 @@ public class CalendarView extends LinearLayout implements ICalendarChanger, ICal
     private Calendar cal = Calendar.getInstance();
     private TextView monthTextView;
 
-    ///////////Style
-    private final int GRIDVIEW_SPACING = 1;
-
-
     private ICalendarModel model = new CalendarModel();
     private OnMonthChangeListener monthChangeListener;
 
