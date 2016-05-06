@@ -38,9 +38,6 @@ public class CalendarView extends LinearLayout implements ICalendarChanger, ICal
     private ICalendarModel model = new CalendarModel();
     private OnMonthChangeListener monthChangeListener;
 
-    ///////////Style
-    private final int GRIDVIEW_SPACING = 1;
-
     public CalendarView(Context context) {
         super(context);
         setupView(context);

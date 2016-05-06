@@ -1,17 +1,14 @@
-package project.io.goeffective.widget;
+package project.io.goeffective.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import project.io.goeffective.models.DayModel;
 import project.io.goeffective.models.IDayModel;
-import project.io.goeffective.models.Task;
-import project.io.goeffective.widget.adapters.DayTaskAdapter;
+import project.io.goeffective.widgets.adapters.DayTaskAdapter;
 
 public class DayView extends LinearLayout {
     private Context context;

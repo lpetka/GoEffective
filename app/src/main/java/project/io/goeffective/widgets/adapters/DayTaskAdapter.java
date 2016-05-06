@@ -1,4 +1,4 @@
-package project.io.goeffective.widget.adapters;
+package project.io.goeffective.widgets.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
