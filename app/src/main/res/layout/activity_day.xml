@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="project.io.goeffective.activities.DayActivity">
 
-    <project.io.goeffective.widget.DayView
+    <project.io.goeffective.widgets.DayView
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>

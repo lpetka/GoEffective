@@ -17,5 +17,7 @@ public class MainPresenter extends Presenter<IMainView> {
     @Override
     public void start() {
         super.start();
+//        this.subscriptions.add(view.openPreferencesScreenClick().observeOn(uiThread).subscribe(o ->
+//            {navigator.openPreferencesActivity();}));
     }
 }

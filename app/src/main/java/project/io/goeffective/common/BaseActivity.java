@@ -2,12 +2,13 @@ package project.io.goeffective.common;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 import project.io.goeffective.presenters.IPresenter;
 import rx.subscriptions.CompositeSubscription;
 
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     protected IPresenter presenter;
     private final int layoutResID;
 
