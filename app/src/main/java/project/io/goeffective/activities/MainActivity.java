@@ -1,16 +1,11 @@
 package project.io.goeffective.activities;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatCallback;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import butterknife.InjectView;
 import project.io.goeffective.R;
@@ -22,9 +17,7 @@ import project.io.goeffective.presenters.MainPresenter;
 import project.io.goeffective.services.Navigator;
 import project.io.goeffective.views.IMainView;
 import project.io.goeffective.widgets.adapters.ViewPagerAdapter;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.view.ViewObservable;
 
 public class MainActivity extends BaseActivity implements IMainView {
     @InjectView(R.id.tabs)

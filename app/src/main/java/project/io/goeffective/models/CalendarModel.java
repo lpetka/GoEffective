@@ -7,8 +7,6 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Random;
 
-import project.io.goeffective.R;
-
 public class CalendarModel implements ICalendarModel{
     private TaskStatus[] t = new TaskStatus[]{TaskStatus.DONE, TaskStatus.PARTLY_DONE, TaskStatus.NOT_DONE};
     private Random random = new Random();
