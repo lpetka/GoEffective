@@ -7,8 +7,11 @@
     <color name="colorPrimaryDark">#125688</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
+    <color name="lightGrey">#D6D7D7</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#c8e8ff</color>
     <color name="taskFuture">#ffffff</color>
     <color name="taskMarkBorder">#333333</color>
+    <color name="toolbarBackground">#0F9D58</color>
+    <color name="white">#ffffff</color>
 </resources>
