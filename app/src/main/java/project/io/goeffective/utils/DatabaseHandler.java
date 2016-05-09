@@ -27,7 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_DATE = "date";
     private static final String KEY_COMMENT = "comment";
 
-    public DatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -38,9 +38,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_TASK_TABLE);
     }
 
+    private void createTaskStartTable(SQLiteDatabase db){
+        String CREATE_TASK_START_TABLE = "CREATE TABLE " + TABLE_TASK_START + "("
+                + KEY_ID + " INTEGER PRIMARY KEY, "
+                + KEY_TASK_ID + " INTEGER, "
+                + KEY_START + " REAL,"
+                + KEY_DELAY + " INTEGER,"
+                + "FOREIGN KEY(" + KEY_TASK_ID + ")"
+                + "REFERENCES "+ TABLE_TASK + "(" + KEY_ID + ")";
+        db.execSQL(CREATE_TASK_START_TABLE);
+    }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         createTaskTable(sqLiteDatabase);
+        createTaskStartTable(sqLiteDatabase);
     }
 
     @Override
