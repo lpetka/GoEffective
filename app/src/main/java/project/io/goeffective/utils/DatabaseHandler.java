@@ -49,14 +49,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_TASK_START_TABLE);
     }
 
+    private void createTaskDoneTable(SQLiteDatabase db){
+        String CREATE_TASK_DONE_TABLE = "CREATE TABLE " + TABLE_TASK_DONE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY, "
+                + KEY_TASK_ID + " INTEGER, "
+                + KEY_DATE + " REAL,"
+                + KEY_COMMENT + " TEXT,"
+                + "FOREIGN KEY(" + KEY_TASK_ID + ")"
+                + "REFERENCES "+ TABLE_TASK + "(" + KEY_ID + ")";
+        db.execSQL(CREATE_TASK_DONE_TABLE);
+    }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         createTaskTable(sqLiteDatabase);
         createTaskStartTable(sqLiteDatabase);
+        createTaskDoneTable(sqLiteDatabase);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK_START);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK_DONE);
+        onCreate(sqLiteDatabase);
     }
 }
