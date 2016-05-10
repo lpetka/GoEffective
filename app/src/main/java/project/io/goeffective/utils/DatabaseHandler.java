@@ -1,10 +1,19 @@
 package project.io.goeffective.utils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Pair;
 
-public class DatabaseHandler extends SQLiteOpenHelper {
+import java.sql.Date;
+import java.util.List;
+
+
+import project.io.goeffective.utils.dbobjects.Task;
+import project.io.goeffective.utils.dbobjects.TaskStart;
+
+public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "GoEffective";
@@ -72,5 +81,57 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK_START);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK_DONE);
         onCreate(sqLiteDatabase);
+    }
+
+    private ContentValues createContentValueTask(Task task){
+        ContentValues values = new ContentValues();
+        if(task.getId() != -1) {
+            values.put(KEY_ID, task.getId());
+        }
+        values.put(KEY_NAME, task.getName());
+        return values;
+    }
+
+    private ContentValues createContentValueTaskStart(Long taskId, TaskStart taskStart){
+        ContentValues values = new ContentValues();
+        values.put(KEY_TASK_ID, taskId);
+        values.put(KEY_START, "julianday(" + taskStart.getStart().toString() + ")");
+        values.put(KEY_DELAY, taskStart.getDelay());
+        return values;
+    }
+
+    @Override
+    public void addTask(Task task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Long taskId = db.insert(TABLE_TASK, null, createContentValueTask(task));
+
+        for (TaskStart taskStart: task.getTaskStartList()) {
+            db.insert(TABLE_TASK_START, null, createContentValueTaskStart(taskId, taskStart));
+        }
+    }
+
+    @Override
+    public void removeTask(Task task) {
+
+    }
+
+    @Override
+    public void changeTask(Task task) {
+
+    }
+
+    @Override
+    public List<Pair<Task, Boolean>> getTasksStatusAtDate(Date date) {
+        return null;
+    }
+
+    @Override
+    public List<Task> getTasksAtDate(Date date) {
+        return null;
+    }
+
+    @Override
+    public void setTaskStatusAtDate(Date date, Task task, Boolean flag) {
+
     }
 }
