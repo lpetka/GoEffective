@@ -15,4 +15,8 @@ public class TaskStart {
     public Date getStart() {
         return start;
     }
+
+    public Integer getId() {
+        return id;
+    }
 }

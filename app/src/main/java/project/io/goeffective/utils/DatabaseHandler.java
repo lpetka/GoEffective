@@ -110,14 +110,29 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         }
     }
 
+    private void deleteTask(SQLiteDatabase db, Task task){
+        for (TaskStart taskStart: task.getTaskStartList()) {
+            db.delete(TABLE_TASK_START, KEY_ID + " = ?", new String[]{String.valueOf(taskStart.getId())});
+        }
+        db.delete(TABLE_TASK, KEY_ID + " = ?", new String[]{ String.valueOf(task.getId())});
+    }
+
+    private void deleteTaskDone(SQLiteDatabase db, Task task){
+        db.delete(TABLE_TASK_DONE, KEY_TASK_ID + " = ?", new String[]{String.valueOf(task.getId())});
+    }
+
     @Override
     public void removeTask(Task task) {
-
+        SQLiteDatabase db = this.getWritableDatabase();
+        deleteTask(db, task);
+        deleteTaskDone(db, task);
     }
 
     @Override
     public void changeTask(Task task) {
-
+        SQLiteDatabase db = this.getWritableDatabase();
+        deleteTask(db, task);
+        addTask(task);
     }
 
     @Override
