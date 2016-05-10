@@ -51,9 +51,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private void createTaskDoneTable(SQLiteDatabase db){
         String CREATE_TASK_DONE_TABLE = "CREATE TABLE " + TABLE_TASK_DONE + "("
-                + KEY_ID + " INTEGER PRIMARY KEY, "
-                + KEY_TASK_ID + " INTEGER, "
-                + KEY_DATE + " REAL,"
+                + KEY_TASK_ID + " INTEGER PRIMARY KEY, "
+                + KEY_DATE + " REAL PRIMARY KEY,"
                 + KEY_COMMENT + " TEXT,"
                 + "FOREIGN KEY(" + KEY_TASK_ID + ")"
                 + "REFERENCES "+ TABLE_TASK + "(" + KEY_ID + ")";
