@@ -8,6 +8,12 @@ public class TaskStart {
     private Date start;
     private Integer delay;
 
+    public TaskStart(Integer id, Date date, Integer delay){
+        this.id = id;
+        this.start = date;
+        this.delay = delay;
+    }
+
     public Integer getDelay() {
         return delay;
     }
