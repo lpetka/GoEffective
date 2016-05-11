@@ -145,11 +145,11 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
 
-    private List<TaskStart> getTaskStartFromDatabase(SQLiteDatabase db, Long id){
+    private List<TaskStart> getTaskStartFromDatabase(SQLiteDatabase db, Integer id){
         return null;
     }
 
-    private Task getTaskFromDatabase(SQLiteDatabase db, Long id){
+    private Task getTaskFromDatabase(SQLiteDatabase db, Integer id){
         return null;
     }
 
@@ -160,14 +160,14 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         String query = "Select " + KEY_ID + " from "+ TABLE_TASK_START +" julianday('now') - " + KEY_START + " = 0;";
         Cursor cursor = db.rawQuery(query, null);
 
-        Set<Long> task_id = new HashSet<>();
+        Set<Integer> task_id = new HashSet<>();
 
         if( cursor.moveToFirst()){
             do {
-                task_id.add(cursor.getLong(0));
+                task_id.add(cursor.getInt(0));
             } while (cursor.moveToNext());
         }
-        for (Long id: task_id) {
+        for (Integer id: task_id) {
             list.add(getTaskFromDatabase(db, id));
         }
 
