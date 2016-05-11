@@ -150,7 +150,14 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
     private Task getTaskFromDatabase(SQLiteDatabase db, Integer id){
-        return null;
+        Cursor cursor = db.query(TABLE_TASK, new String[] {KEY_NAME}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor == null) return null;
+
+        cursor.moveToFirst();
+        String name = cursor.getString(0);
+        List<TaskStart> taskStarts = getTaskStartFromDatabase(db, id);
+
+        return new Task(id, name, taskStarts);
     }
 
     @Override
