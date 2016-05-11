@@ -139,9 +139,26 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         addTask(task);
     }
 
+    private Boolean checkTaskStatusAtDate(SQLiteDatabase db, Integer taskId, Date date){
+        Cursor cursor = db.query(
+                TABLE_TASK_DONE, new String[]{KEY_TASK_ID},
+                "Select ? from ? where ? = ? and ? = juliandate(?)",
+                new String[]{KEY_TASK_ID, TABLE_TASK_DONE, KEY_TASK_ID, String.valueOf(taskId) ,KEY_DATE, date.toString()},
+                null, null, null, null);
+
+        return cursor != null;
+    }
+
     @Override
     public List<Pair<Task, Boolean>> getTasksStatusAtDate(Date date) {
-        return null;
+        List<Task> tasks = getTasksAtDate(date);
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Pair<Task, Boolean>> pairList = new ArrayList<>();
+        for (Task task: tasks) {
+            Pair<Task, Boolean> pair= new Pair<>(task, checkTaskStatusAtDate(db, task.getId(), date));
+            pairList.add(pair);
+        }
+        return pairList;
     }
 
 
