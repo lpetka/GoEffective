@@ -1,7 +1,6 @@
 package project.io.goeffective.widgets.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,20 +8,15 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import project.io.goeffective.R;
 
 public class WeekDayListAdapter extends BaseAdapter {
-    List<CheckBox> checkBoxes;
     final String[] weekDayNames;
     private final Context context;
 
     public WeekDayListAdapter(Context context) {
         this.context = context;
         this.weekDayNames = context.getResources().getStringArray(R.array.week_days);
-        this.checkBoxes = new ArrayList<>(weekDayNames.length);
     }
 
     @Override
@@ -32,8 +26,6 @@ public class WeekDayListAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        Log.d("geItem", ""+i);
-        Log.d("geItem", weekDayNames[i]);
         return weekDayNames[i];
     }
 
@@ -56,17 +48,14 @@ public class WeekDayListAdapter extends BaseAdapter {
         layout.addView(weekDayTextView);
 
         CheckBox checkBox = new CheckBox(context);
-        checkBoxes.add(checkBox);
         RelativeLayout.LayoutParams rightParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
         checkBox.setLayoutParams(rightParams);
         layout.addView(checkBox);
 
-        return layout;
-    }
+        layout.setOnClickListener(view1 -> checkBox.toggle());
 
-    public void toggle(int i) {
-        checkBoxes.get(i).toggle();
+        return layout;
     }
 }

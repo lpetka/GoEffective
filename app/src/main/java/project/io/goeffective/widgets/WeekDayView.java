@@ -25,6 +25,5 @@ public class WeekDayView extends ListView {
     private void setupView(Context context) {
         WeekDayListAdapter weekDayListAdapter = new WeekDayListAdapter(context);
         setAdapter(weekDayListAdapter);
-        setOnItemClickListener((adapterView, view, i, l) -> weekDayListAdapter.toggle(i));
     }
 }
