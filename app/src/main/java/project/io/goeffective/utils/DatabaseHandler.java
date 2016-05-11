@@ -2,12 +2,16 @@ package project.io.goeffective.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 import project.io.goeffective.utils.dbobjects.Task;
@@ -140,9 +144,34 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         return null;
     }
 
+
+    private List<TaskStart> getTaskStartFromDatabase(SQLiteDatabase db, Long id){
+        return null;
+    }
+
+    private Task getTaskFromDatabase(SQLiteDatabase db, Long id){
+        return null;
+    }
+
     @Override
     public List<Task> getTasksAtDate(Date date) {
-        return null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Task> list = new ArrayList<>();
+        String query = "Select " + KEY_ID + " from "+ TABLE_TASK_START +" julianday('now') - " + KEY_START + " = 0;";
+        Cursor cursor = db.rawQuery(query, null);
+
+        Set<Long> task_id = new HashSet<>();
+
+        if( cursor.moveToFirst()){
+            do {
+                task_id.add(cursor.getLong(0));
+            } while (cursor.moveToNext());
+        }
+        for (Long id: task_id) {
+            list.add(getTaskFromDatabase(db, id));
+        }
+
+        return list;
     }
 
     @Override
