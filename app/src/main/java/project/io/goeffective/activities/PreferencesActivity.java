@@ -48,7 +48,7 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     private void createTestNotification() {
         final NotificationCreator notificationCreator = new NotificationCreator(this);
         final NotificationScheduler notificationScheduler = new NotificationScheduler(this);
-        final Notification notification = notificationCreator.createNotification("Title", "Content");
+        final Notification notification = notificationCreator.createNotification("Title", "Content", R.drawable.day_task_not_done);
         notificationScheduler.scheduleNotification(notification, 3000);
     }
 }

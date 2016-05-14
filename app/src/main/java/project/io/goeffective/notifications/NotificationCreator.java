@@ -4,8 +4,6 @@ import android.app.Notification;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 
-import project.io.goeffective.R;
-
 public class NotificationCreator {
     private final Context context;
 
@@ -13,11 +11,11 @@ public class NotificationCreator {
         this.context = context;
     }
 
-    public Notification createNotification(String title, String content) {
+    public Notification createNotification(String title, String content, int icon) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(title);
         builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.day_task_not_done);
+        builder.setSmallIcon(icon);
         return builder.build();
     }
 }
