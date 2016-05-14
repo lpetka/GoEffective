@@ -25,4 +25,12 @@
         android:id="@+id/clear_user_data_button"
         android:layout_below="@+id/reminder_switch"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Testuj Notyfikacje"
+        android:id="@+id/notification_test_button"
+        android:layout_below="@+id/clear_user_data_button"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

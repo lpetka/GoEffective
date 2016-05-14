@@ -1,11 +1,14 @@
 package project.io.goeffective.activities;
 
+import android.app.Notification;
 import android.os.Bundle;
 import android.widget.Button;
 
 import butterknife.InjectView;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
+import project.io.goeffective.notifications.NotificationCreator;
+import project.io.goeffective.notifications.NotificationScheduler;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.PreferencesPresenter;
 import project.io.goeffective.services.Navigator;
@@ -19,6 +22,9 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     @InjectView(R.id.clear_user_data_button)
     Button clearUserDataButton;
 
+    @InjectView(R.id.notification_test_button)
+    Button notificationTestButton;
+
     public PreferencesActivity() {
         super(R.layout.activity_preferences);
     }
@@ -31,5 +37,18 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     @Override
     public Observable clearUserDataButtonClick() {
         return ViewObservable.clicks(clearUserDataButton);
+    }
+
+    @Override
+    protected void onViewReady() {
+        super.onViewReady();
+        notificationTestButton.setOnClickListener(view -> createTestNotification());
+    }
+
+    private void createTestNotification() {
+        final NotificationCreator notificationCreator = new NotificationCreator(this);
+        final NotificationScheduler notificationScheduler = new NotificationScheduler(this);
+        final Notification notification = notificationCreator.createNotification("Title", "Content");
+        notificationScheduler.scheduleNotification(notification, 3000);
     }
 }
