@@ -11,6 +11,8 @@ import project.io.goeffective.R;
 import project.io.goeffective.activities.MainActivity;
 
 public class TaskNotificationCreator {
+    public static final int NOTIFICATION_ID = 1;
+
     private final Context context;
     private final String taskNotificationTitle;
     private final String markTaskAsDoneActionName;
@@ -53,6 +55,7 @@ public class TaskNotificationCreator {
     private PendingIntent getPendingSetDoneIntent(Task task) {
         final Intent setDoneIntent = new Intent(context, SetDoneNotification.class);
         setDoneIntent.putExtra(SetDoneNotification.TASK_ID, task.getId());
+        setDoneIntent.putExtra(SetDoneNotification.NOTIFICATION_ID, NOTIFICATION_ID);
         setDoneIntent.putExtra(SetDoneNotification.TASK, task);
         return PendingIntent.getBroadcast(context, 0, setDoneIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
