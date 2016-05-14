@@ -19,7 +19,7 @@ import project.io.goeffective.utils.dbobjects.TaskStart;
 
 public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "GoEffective";
 
     private static final String TABLE_TASK = "tasks";
@@ -47,7 +47,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     private void createTaskTable(SQLiteDatabase db){
         String CREATE_TASK_TABLE = "CREATE TABLE " + TABLE_TASK + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
-                + KEY_NAME + " TEXT" + ")";
+                + KEY_NAME + " TEXT"
+                + ")";
         db.execSQL(CREATE_TASK_TABLE);
     }
 
@@ -58,17 +59,20 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
                 + KEY_START + " REAL,"
                 + KEY_DELAY + " INTEGER,"
                 + "FOREIGN KEY(" + KEY_TASK_ID + ")"
-                + "REFERENCES "+ TABLE_TASK + "(" + KEY_ID + ")";
+                + "REFERENCES "+ TABLE_TASK + "(" + KEY_ID + ")"
+                + ")";
         db.execSQL(CREATE_TASK_START_TABLE);
     }
 
     private void createTaskDoneTable(SQLiteDatabase db){
         String CREATE_TASK_DONE_TABLE = "CREATE TABLE " + TABLE_TASK_DONE + "("
-                + KEY_TASK_ID + " INTEGER PRIMARY KEY, "
-                + KEY_DATE + " REAL PRIMARY KEY,"
+                + KEY_TASK_ID + " INTEGER, "
+                + KEY_DATE + " REAL,"
                 + KEY_COMMENT + " TEXT,"
+                + "PRIMARY KEY (" + KEY_TASK_ID + ", " + KEY_DATE + "),"
                 + "FOREIGN KEY(" + KEY_TASK_ID + ")"
-                + "REFERENCES "+ TABLE_TASK + "(" + KEY_ID + ")";
+                + "REFERENCES "+ TABLE_TASK + "(" + KEY_ID + ")"
+                + ")";
         db.execSQL(CREATE_TASK_DONE_TABLE);
     }
 
@@ -96,12 +100,11 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         return values;
     }
 
-    private ContentValues createContentValueTaskStart(Long taskId, TaskStart taskStart){
-        ContentValues values = new ContentValues();
-        values.put(KEY_TASK_ID, taskId);
-        values.put(KEY_START, "julianday(" + taskStart.getStart().toString() + ")");
-        values.put(KEY_DELAY, taskStart.getDelay());
-        return values;
+    private String createContentValueTaskStart(Long taskId, TaskStart taskStart, String tableName){
+
+        return String.format("INSERT INTO %s (%s, %s, %s) VALUES(%d, julianday('%s'), %d);",
+                tableName, KEY_TASK_ID, KEY_START, KEY_DELAY,
+                taskId, taskStart.getStart().toString(), taskStart.getDelay());
     }
 
     @Override
@@ -110,7 +113,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         Long taskId = db.insert(TABLE_TASK, null, createContentValueTask(task));
 
         for (TaskStart taskStart: task.getTaskStartList()) {
-            db.insert(TABLE_TASK_START, null, createContentValueTaskStart(taskId, taskStart));
+            String query = createContentValueTaskStart(taskId, taskStart, TABLE_TASK_START);
+            db.execSQL(query);
         }
     }
 
@@ -142,9 +146,9 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     private Boolean checkTaskStatusAtDate(SQLiteDatabase db, Integer taskId, Date date){
         Cursor cursor = db.query(
                 TABLE_TASK_DONE, new String[]{KEY_TASK_ID},
-                "Select ? from ? where ? = ? and ? = julianday(?)",
-                new String[]{KEY_TASK_ID, TABLE_TASK_DONE, KEY_TASK_ID, String.valueOf(taskId) ,KEY_DATE, date.toString()},
-                null, null, null, null);
+                String.format("Select %s from %s where %s = %s and cast(%s as int) = cast(julianday('%s') as int)",
+                KEY_TASK_ID, TABLE_TASK_DONE, KEY_TASK_ID, String.valueOf(taskId) ,KEY_DATE, date.toString()),
+                null, null, null, null, null);
 
         return cursor != null;
     }
@@ -163,8 +167,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
 
     private List<TaskStart> getTaskStartFromDatabase(SQLiteDatabase db, Integer id){
-        String taskStartQuery = "Select ?, date(?), ? from ? where ? = ?";
-        Cursor cursor = db.rawQuery(taskStartQuery, new String[]{KEY_ID, KEY_START, KEY_DELAY, TABLE_TASK_START, KEY_TASK_ID, String.valueOf(id)});
+        String taskStartQuery = String.format("Select %s, date(%s), %s from %s where %s = %s;", KEY_ID, KEY_START, KEY_DELAY, TABLE_TASK_START, KEY_TASK_ID, String.valueOf(id));
+        Cursor cursor = db.rawQuery(taskStartQuery, null);
         List<TaskStart> list = new ArrayList<>();
         if(cursor.moveToFirst()){
             do {
@@ -179,13 +183,12 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
     private Task getTaskFromDatabase(SQLiteDatabase db, Integer id){
-        Cursor cursor = db.query(TABLE_TASK, new String[] {KEY_NAME}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_TASK, new String[] {KEY_NAME}, KEY_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor == null) return null;
 
         cursor.moveToFirst();
         String name = cursor.getString(0);
         List<TaskStart> taskStarts = getTaskStartFromDatabase(db, id);
-
         return new Task(id, name, taskStarts);
     }
 
@@ -193,7 +196,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     public List<Task> getTasksAtDate(Date date) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Task> list = new ArrayList<>();
-        String query = "Select " + KEY_ID + " from "+ TABLE_TASK_START +" int(julianday('" + date.toString() + "')) - int(" + KEY_START + ") = 0;";
+        String query = "Select " + KEY_ID + " from "+ TABLE_TASK_START +" where cast(julianday('" + date.toString() + "') as int) - cast(" + KEY_START + " as int) = 0;";
         Cursor cursor = db.rawQuery(query, null);
 
         Set<Integer> task_id = new HashSet<>();
