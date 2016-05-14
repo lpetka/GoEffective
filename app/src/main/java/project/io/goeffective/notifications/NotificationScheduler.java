@@ -1,0 +1,35 @@
+package project.io.goeffective.notifications;
+
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.SystemClock;
+
+public class NotificationScheduler {
+    private final Context context;
+
+    public NotificationScheduler(Context context) {
+        this.context = context;
+    }
+
+    public void scheduleNotification(Notification notification, long delay) {
+        final PendingIntent pendingIntent = createNotificationIntent(notification);
+        setAlarmManager(delay, pendingIntent);
+    }
+
+    private void setAlarmManager(long delay, PendingIntent pendingIntent) {
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        final Object systemService = context.getSystemService(Context.ALARM_SERVICE);
+        final AlarmManager alarmManager = (AlarmManager) systemService;
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private PendingIntent createNotificationIntent(Notification notification) {
+        final Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+}
