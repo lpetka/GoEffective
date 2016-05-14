@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class NotificationScheduler {
     private final Context context;
 
@@ -17,6 +20,19 @@ public class NotificationScheduler {
     public void scheduleNotification(Notification notification, long delay) {
         final PendingIntent pendingIntent = createNotificationIntent(notification);
         setAlarmManager(delay, pendingIntent);
+    }
+
+    public void scheduleNotification(Notification notification, Date futureDate) {
+        long delay = dateToDelay(futureDate);
+        scheduleNotification(notification, delay);
+    }
+
+    private long dateToDelay(Date futureDate) {
+        final Calendar calendar = Calendar.getInstance();
+        final long currentMillis = calendar.getTimeInMillis();
+        calendar.setTime(futureDate);
+        final long futureMillis = calendar.getTimeInMillis();
+        return futureMillis - currentMillis;
     }
 
     private void setAlarmManager(long delay, PendingIntent pendingIntent) {
