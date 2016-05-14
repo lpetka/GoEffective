@@ -11,8 +11,8 @@ import java.util.Random;
 import butterknife.InjectView;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
-import project.io.goeffective.notifications.Task;
 import project.io.goeffective.notifications.NotificationScheduler;
+import project.io.goeffective.notifications.Task;
 import project.io.goeffective.notifications.TaskNotificationCreator;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.PreferencesPresenter;
@@ -32,8 +32,22 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     @InjectView(R.id.notification_test_button)
     Button notificationTestButton;
 
+    @InjectView(R.id.notification_cancel_button)
+    Button notificationCancelButton;
+
+    private Task randomTask;
+
     public PreferencesActivity() {
         super(R.layout.activity_preferences);
+        createRandomTask();
+    }
+
+    private void createRandomTask() {
+        final int randomId = random.nextInt(100);
+        Calendar calendar = Calendar.getInstance();
+        final Date taskDate = new Date(calendar.getTimeInMillis() + 3000);
+        final String taskName = "Przykładowe zadanie " + randomId;
+        randomTask = new Task(randomId, taskName, taskDate);
     }
 
     @Override
@@ -50,19 +64,20 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     protected void onViewReady() {
         super.onViewReady();
         notificationTestButton.setOnClickListener(view -> createTestNotification());
+        notificationCancelButton.setOnClickListener(view -> cancelTestNotification());
     }
 
     private void createTestNotification() {
         final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(this);
         final NotificationScheduler notificationScheduler = new NotificationScheduler(this);
+        final Notification notification = taskNotificationCreator.createNotification(randomTask);
+        notificationScheduler.scheduleNotification(notification, randomTask.getDate());
+    }
 
-        final int randomId = random.nextInt(100);
-        Calendar calendar = Calendar.getInstance();
-        final Date taskDate = new Date(calendar.getTimeInMillis() + 3000);
-        final String taskName = "Przykładowe zadanie " + randomId;
-        final Task task = new Task(randomId, taskName, taskDate);
-
-        final Notification notification = taskNotificationCreator.createNotification(task);
-        notificationScheduler.scheduleNotification(notification, task.getDate());
+    private void cancelTestNotification() {
+        final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(this);
+        final NotificationScheduler notificationScheduler = new NotificationScheduler(this);
+        final Notification notification = taskNotificationCreator.createNotification(randomTask);
+        notificationScheduler.cancelNotification(notification);
     }
 }

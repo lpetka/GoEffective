@@ -29,8 +29,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Testuj Notyfikacje"
+        android:text="Testuj Notyfikację"
         android:id="@+id/notification_test_button"
         android:layout_below="@+id/clear_user_data_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Anuluj Notyfikację"
+        android:id="@+id/notification_cancel_button"
+        android:layout_below="@+id/notification_test_button"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

@@ -11,10 +11,20 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class NotificationScheduler {
+    private static AlarmManager alarmManager = null;
+
     private final Context context;
 
     public NotificationScheduler(Context context) {
         this.context = context;
+        if (alarmManager == null) {
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        }
+    }
+
+    public void cancelNotification(Notification notification) {
+        final PendingIntent pendingIntent = createNotificationIntent(notification);
+        alarmManager.cancel(pendingIntent);
     }
 
     public void scheduleNotification(Notification notification, long delay) {
@@ -37,8 +47,6 @@ public class NotificationScheduler {
 
     private void setAlarmManager(long delay, PendingIntent pendingIntent) {
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        final Object systemService = context.getSystemService(Context.ALARM_SERVICE);
-        final AlarmManager alarmManager = (AlarmManager) systemService;
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
