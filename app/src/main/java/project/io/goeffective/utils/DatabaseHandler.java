@@ -121,24 +121,28 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         addTaskStart(db, task, taskId.intValue());
     }
 
+    private String removeQuery(String tableName, String idName, Integer id){
+        return String.format("Delete from %s where %s = %d", tableName, idName, id);
+    }
+
     private void deleteTaskStart(SQLiteDatabase db, Task task){
-        db.delete(TABLE_TASK_START, "? = ?", new String[]{KEY_TASK_ID, String.valueOf(task.getId())});
+        db.execSQL(removeQuery(TABLE_TASK_START, KEY_TASK_ID, task.getId()));
     }
 
     private void deleteTask(SQLiteDatabase db, Task task){
         deleteTaskStart(db, task);
-        db.delete(TABLE_TASK, "? = ?", new String[]{ KEY_ID, String.valueOf(task.getId())});
+        db.execSQL(removeQuery(TABLE_TASK, KEY_ID, task.getId()));
     }
 
     private void deleteTaskDone(SQLiteDatabase db, Task task){
-        db.delete(TABLE_TASK_DONE, "? = ?", new String[]{KEY_TASK_ID, String.valueOf(task.getId())});
+        db.execSQL(removeQuery(TABLE_TASK_DONE, KEY_TASK_ID, task.getId()));
     }
 
     @Override
     public void removeTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
-        deleteTask(db, task);
         deleteTaskDone(db, task);
+        deleteTask(db, task);
     }
 
     @Override
