@@ -45,7 +45,7 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     private void createRandomTask() {
         final int randomId = random.nextInt(100);
         Calendar calendar = Calendar.getInstance();
-        final Date taskDate = new Date(calendar.getTimeInMillis() + 3000);
+        final Date taskDate = new Date(calendar.getTimeInMillis() + 5000);
         final String taskName = "Przykładowe zadanie " + randomId;
         randomTask = new Task(randomId, taskName, taskDate);
     }

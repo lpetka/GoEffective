@@ -29,25 +29,20 @@ public class NotificationScheduler {
 
     public void scheduleNotification(Notification notification, long delay) {
         final PendingIntent pendingIntent = createNotificationIntent(notification);
-        setAlarmManager(delay, pendingIntent);
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     public void scheduleNotification(Notification notification, Date futureDate) {
-        long delay = dateToDelay(futureDate);
-        scheduleNotification(notification, delay);
+        final long futureTimeInMillis = getFutureTimeInMillis(futureDate);
+        final PendingIntent pendingIntent = createNotificationIntent(notification);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, futureTimeInMillis, pendingIntent);
     }
 
-    private long dateToDelay(Date futureDate) {
-        final Calendar calendar = Calendar.getInstance();
-        final long currentMillis = calendar.getTimeInMillis();
+    private long getFutureTimeInMillis(Date futureDate) {
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(futureDate);
-        final long futureMillis = calendar.getTimeInMillis();
-        return futureMillis - currentMillis;
-    }
-
-    private void setAlarmManager(long delay, PendingIntent pendingIntent) {
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        return calendar.getTimeInMillis();
     }
 
     private PendingIntent createNotificationIntent(Notification notification) {
