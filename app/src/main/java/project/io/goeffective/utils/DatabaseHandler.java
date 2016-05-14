@@ -144,7 +144,11 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     @Override
     public void updateTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
-
+        deleteTaskStart(db, task);
+        String query = String.format("Update %s set %s = '%s' where %s = %d",
+                TABLE_TASK, KEY_NAME, task.getName(), KEY_ID, task.getId());
+        db.execSQL(query);
+        addTaskStart(db, task, task.getId());
     }
 
     private Boolean checkTaskStatusAtDate(SQLiteDatabase db, Integer taskId, Date date){
