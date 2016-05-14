@@ -100,28 +100,35 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         return values;
     }
 
-    private String createContentValueTaskStart(Long taskId, TaskStart taskStart, String tableName){
+    private String createContentValueTaskStart(Integer taskId, TaskStart taskStart, String tableName){
 
         return String.format("INSERT INTO %s (%s, %s, %s) VALUES(%d, julianday('%s'), %d);",
                 tableName, KEY_TASK_ID, KEY_START, KEY_DELAY,
                 taskId, taskStart.getStart().toString(), taskStart.getDelay());
     }
 
-    @Override
-    public void addTask(Task task) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Long taskId = db.insert(TABLE_TASK, null, createContentValueTask(task));
-
+    private void addTaskStart(SQLiteDatabase db, Task task, Integer taskId){
         for (TaskStart taskStart: task.getTaskStartList()) {
             String query = createContentValueTaskStart(taskId, taskStart, TABLE_TASK_START);
             db.execSQL(query);
         }
     }
 
-    private void deleteTask(SQLiteDatabase db, Task task){
+    @Override
+    public void addTask(Task task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Long taskId = db.insert(TABLE_TASK, null, createContentValueTask(task));
+        addTaskStart(db, task, taskId.intValue());
+    }
+
+    private void deleteTaskStart(SQLiteDatabase db, Task task){
         for (TaskStart taskStart: task.getTaskStartList()) {
             db.delete(TABLE_TASK_START, KEY_ID + " = ?", new String[]{String.valueOf(taskStart.getId())});
         }
+    }
+
+    private void deleteTask(SQLiteDatabase db, Task task){
+        deleteTaskStart(db, task);
         db.delete(TABLE_TASK, KEY_ID + " = ?", new String[]{ String.valueOf(task.getId())});
     }
 
@@ -139,8 +146,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     @Override
     public void updateTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
-        //deleteTask(db, task);
-        //addTask(task);
+
     }
 
     private Boolean checkTaskStatusAtDate(SQLiteDatabase db, Integer taskId, Date date){
