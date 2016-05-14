@@ -142,7 +142,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     private Boolean checkTaskStatusAtDate(SQLiteDatabase db, Integer taskId, Date date){
         Cursor cursor = db.query(
                 TABLE_TASK_DONE, new String[]{KEY_TASK_ID},
-                "Select ? from ? where ? = ? and ? = juliandate(?)",
+                "Select ? from ? where ? = ? and ? = julianday(?)",
                 new String[]{KEY_TASK_ID, TABLE_TASK_DONE, KEY_TASK_ID, String.valueOf(taskId) ,KEY_DATE, date.toString()},
                 null, null, null, null);
 
@@ -193,7 +193,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     public List<Task> getTasksAtDate(Date date) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Task> list = new ArrayList<>();
-        String query = "Select " + KEY_ID + " from "+ TABLE_TASK_START +" julianday('now') - " + KEY_START + " = 0;";
+        String query = "Select " + KEY_ID + " from "+ TABLE_TASK_START +" int(julianday('" + date.toString() + "')) - int(" + KEY_START + ") = 0;";
         Cursor cursor = db.rawQuery(query, null);
 
         Set<Integer> task_id = new HashSet<>();
@@ -212,6 +212,16 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
     @Override
     public void setTaskStatusAtDate(Date date, Task task, Boolean flag) {
-
+        SQLiteDatabase db = this.getWritableDatabase();
+        String id = String.valueOf(task.getId());
+        if(flag){
+            ContentValues values = new ContentValues();
+            values.put(KEY_TASK_ID, id);
+            values.put(KEY_DATE, date.toString());
+            db.insert(TABLE_TASK_DONE, null, values);
+        } else {
+            db.delete(TABLE_TASK_DONE, "? = ? and julianday(?) = ?",
+                    new String[]{KEY_TASK_ID, id, KEY_DATE, date.toString()});
+        }
     }
 }
