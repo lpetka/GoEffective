@@ -45,7 +45,7 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     private void createRandomTask() {
         final int randomId = random.nextInt(100);
         Calendar calendar = Calendar.getInstance();
-        final Date taskDate = new Date(calendar.getTimeInMillis() + 5000);
+        final Date taskDate = new Date(calendar.getTimeInMillis() + 3000);
         final String taskName = "Przykładowe zadanie " + randomId;
         randomTask = new Task(randomId, taskName, taskDate);
     }
@@ -71,7 +71,7 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
         final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(this);
         final NotificationScheduler notificationScheduler = new NotificationScheduler(this);
         final Notification notification = taskNotificationCreator.createNotification(randomTask);
-        notificationScheduler.scheduleNotification(notification, randomTask.getDate());
+        notificationScheduler.scheduleNotification(notification, 0);
     }
 
     private void cancelTestNotification() {

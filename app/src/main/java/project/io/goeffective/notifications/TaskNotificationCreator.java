@@ -28,9 +28,18 @@ public class TaskNotificationCreator {
         final PendingIntent pendingMainActivityIntent = getPendingMainActivityIntent();
         builder.setContentIntent(pendingMainActivityIntent);
         final PendingIntent pendingSetDoneIntent = getPendingSetDoneIntent(task);
-        builder.addAction(R.drawable.day_task_not_done, markTaskAsDoneActionName, pendingSetDoneIntent);
+        final int icon = getTaskActionIcon(task);
+        builder.addAction(icon, markTaskAsDoneActionName, pendingSetDoneIntent);
         builder.setSmallIcon(android.R.drawable.sym_def_app_icon);
         return builder.build();
+    }
+
+    private int getTaskActionIcon(Task task) {
+        if (task.isDone()) {
+            return R.drawable.day_task_done_icon;
+        } else {
+            return R.drawable.day_task_not_done_icon;
+        }
     }
 
     private PendingIntent getPendingMainActivityIntent() {
@@ -38,13 +47,13 @@ public class TaskNotificationCreator {
         final TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(intentToOpen);
-        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     private PendingIntent getPendingSetDoneIntent(Task task) {
         final Intent setDoneIntent = new Intent(context, SetDoneNotification.class);
         setDoneIntent.putExtra(SetDoneNotification.TASK_ID, task.getId());
         setDoneIntent.putExtra(SetDoneNotification.TASK, task);
-        return PendingIntent.getBroadcast(context, 0, setDoneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context, 0, setDoneIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }
