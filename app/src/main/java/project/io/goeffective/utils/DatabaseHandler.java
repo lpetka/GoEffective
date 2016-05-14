@@ -19,7 +19,7 @@ import project.io.goeffective.utils.dbobjects.TaskStart;
 
 public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "GoEffective";
 
     private static final String TABLE_TASK = "tasks";
@@ -188,14 +188,15 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
     private Task getTaskFromDatabase(SQLiteDatabase db, Integer id){
-        Cursor cursor = db.query(TABLE_TASK, new String[] {KEY_NAME}, KEY_ID + " = ?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
-        if (cursor == null) return null;
-
-        cursor.moveToFirst();
-        String name = cursor.getString(0);
-        List<TaskStart> taskStarts = getTaskStartFromDatabase(db, id);
-        return new Task(id, name, taskStarts);
+        String query = String.format("Select %s from %s where %s = %s;", KEY_NAME, TABLE_TASK,
+                KEY_ID, String.valueOf(id));
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor != null && cursor.moveToFirst()) {
+            String name = cursor.getString(0);
+            List<TaskStart> taskStarts = getTaskStartFromDatabase(db, id);
+            return new Task(id, name, taskStarts);
+        }
+        return null;
     }
 
     @Override
@@ -214,7 +215,10 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
             } while (cursor.moveToNext());
         }
         for (Integer id: task_id) {
-            list.add(getTaskFromDatabase(db, id));
+            Task task = getTaskFromDatabase(db, id);
+            if (task != null){
+                list.add(task);
+            }
         }
 
         return list;
