@@ -4,11 +4,16 @@ import android.app.Notification;
 import android.os.Bundle;
 import android.widget.Button;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+
 import butterknife.InjectView;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
-import project.io.goeffective.notifications.NotificationCreator;
+import project.io.goeffective.notifications.Task;
 import project.io.goeffective.notifications.NotificationScheduler;
+import project.io.goeffective.notifications.TaskNotificationCreator;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.PreferencesPresenter;
 import project.io.goeffective.services.Navigator;
@@ -21,6 +26,8 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
 
     @InjectView(R.id.clear_user_data_button)
     Button clearUserDataButton;
+
+    private Random random = new Random();
 
     @InjectView(R.id.notification_test_button)
     Button notificationTestButton;
@@ -46,9 +53,16 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     }
 
     private void createTestNotification() {
-        final NotificationCreator notificationCreator = new NotificationCreator(this);
+        final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(this);
         final NotificationScheduler notificationScheduler = new NotificationScheduler(this);
-        final Notification notification = notificationCreator.createNotification("Title", "Content", R.drawable.day_task_not_done);
-        notificationScheduler.scheduleNotification(notification, 3000);
+
+        final int randomId = random.nextInt(100);
+        Calendar calendar = Calendar.getInstance();
+        final Date taskDate = new Date(calendar.getTimeInMillis() + 3000);
+        final String taskName = "Przykładowe zadanie " + randomId;
+        final Task task = new Task(randomId, taskName, taskDate);
+
+        final Notification notification = taskNotificationCreator.createNotification(task);
+        notificationScheduler.scheduleNotification(notification, task.getDate());
     }
 }

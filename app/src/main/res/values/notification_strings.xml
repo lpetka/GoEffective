@@ -1,0 +1,4 @@
+<resources>
+    <string name="taks_notification_title">Zadanie do wykonania</string>
+    <string name="mark_task_as_done_action">Zadanie wykonane</string>
+</resources>
