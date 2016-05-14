@@ -137,7 +137,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public void changeTask(Task task) {
+    public void updateTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         //deleteTask(db, task);
         //addTask(task);
