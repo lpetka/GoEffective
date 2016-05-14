@@ -1,8 +1,9 @@
 package project.io.goeffective.notifications;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Task {
+public class Task implements Serializable {
     private final int id;
     private final String name;
     private final Date date;

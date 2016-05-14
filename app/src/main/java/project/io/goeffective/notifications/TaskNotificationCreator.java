@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -12,8 +11,6 @@ import project.io.goeffective.R;
 import project.io.goeffective.activities.MainActivity;
 
 public class TaskNotificationCreator {
-    private static final int SET_DONE_REQUEST_CODE = 12345;
-
     private final Context context;
     private final String taskNotificationTitle;
     private final String markTaskAsDoneActionName;
@@ -45,11 +42,9 @@ public class TaskNotificationCreator {
     }
 
     private PendingIntent getPendingSetDoneIntent(Task task) {
-        final Intent setDoneIntent = new Intent();
-        setDoneIntent.setAction("setDone");
-        final Bundle setDoneBundle = new Bundle();
-        setDoneBundle.putInt("taskId", task.getId());
-        setDoneIntent.putExtras(setDoneBundle);
-        return PendingIntent.getBroadcast(context, SET_DONE_REQUEST_CODE, setDoneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final Intent setDoneIntent = new Intent(context, SetDoneNotification.class);
+        setDoneIntent.putExtra(SetDoneNotification.TASK_ID, task.getId());
+        setDoneIntent.putExtra(SetDoneNotification.TASK, task);
+        return PendingIntent.getBroadcast(context, 0, setDoneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }
