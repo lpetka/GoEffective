@@ -2,7 +2,7 @@ package project.io.goeffective.utils;
 
 import android.util.Pair;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import project.io.goeffective.utils.dbobjects.Task;

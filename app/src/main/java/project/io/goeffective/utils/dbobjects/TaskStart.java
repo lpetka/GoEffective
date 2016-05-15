@@ -1,7 +1,6 @@
 package project.io.goeffective.utils.dbobjects;
 
-
-import java.sql.Date;
+import java.util.Date;
 
 public class TaskStart {
     private Integer id;
