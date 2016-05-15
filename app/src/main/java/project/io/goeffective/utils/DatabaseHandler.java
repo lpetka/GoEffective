@@ -7,8 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
 
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +21,7 @@ import project.io.goeffective.utils.dbobjects.TaskStart;
 
 public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "GoEffective";
 
     private static final String TABLE_TASK = "tasks";
@@ -39,6 +41,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     //Table task_done
     private static final String KEY_DATE = "date_done";
     private static final String KEY_COMMENT = "comment";
+
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -101,10 +105,9 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
     private String createContentValueTaskStart(Integer taskId, TaskStart taskStart, String tableName){
-
         return String.format("INSERT INTO %s (%s, %s, %s) VALUES(%d, julianday('%s'), %d);",
                 tableName, KEY_TASK_ID, KEY_START, KEY_DELAY,
-                taskId, taskStart.getStart().toString(), taskStart.getDelay());
+                taskId, dateFormat.format(taskStart.getStart()), taskStart.getDelay());
     }
 
     private void addTaskStart(SQLiteDatabase db, Task task, Integer taskId){
@@ -158,7 +161,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     private Boolean checkTaskStatusAtDate(SQLiteDatabase db, Integer taskId, Date date){
         String query = String.format("Select %s from %s where %s = %s and cast(%s as int) = cast(julianday('%s') as int);",
                 KEY_TASK_ID, TABLE_TASK_DONE,
-                KEY_TASK_ID, String.valueOf(taskId), KEY_DATE, date.toString());
+                KEY_TASK_ID, String.valueOf(taskId), KEY_DATE, dateFormat.format(date));
         Cursor cursor = db.rawQuery(query, null);
         return cursor.moveToFirst();
     }
@@ -183,11 +186,13 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         List<TaskStart> list = new ArrayList<>();
         if(cursor.moveToFirst()){
             do {
+                try{
                 Integer taskStartId = cursor.getInt(0);
-                Date start = Date.valueOf(cursor.getString(1));
+                Date start = dateFormat.parse(cursor.getString(1));
                 Integer delay = cursor.getInt(2);
                 TaskStart taskStart = new TaskStart(taskStartId, start, delay);
                 list.add(taskStart);
+                } catch (ParseException e) {}
             } while (cursor.moveToNext());
         }
         return list;
@@ -210,7 +215,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Task> list = new ArrayList<>();
         String query = String.format("Select %s from %s where cast(julianday('%s') as int) - cast(%s as int) = 0;",
-                KEY_ID, TABLE_TASK_START, date.toString(), KEY_START);
+                KEY_ID, TABLE_TASK_START, dateFormat.format(date), KEY_START);
         Cursor cursor = db.rawQuery(query, null);
 
         Set<Integer> task_id = new HashSet<>();
@@ -237,11 +242,11 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         if(flag){
             String query = String.format("Insert into %s (%s, %s, %s) values (%s, julianday('%s'), '%s')",
                     TABLE_TASK_DONE, KEY_TASK_ID, KEY_DATE, KEY_COMMENT,
-                    id, date.toString(), "commant");
+                    id, dateFormat.format(date), "commant");
             db.execSQL(query);
         } else {
             String query = String.format("Delete from %s where %s = %s and cast(%s as int) = cast(julianday('%s') as int)",
-                    TABLE_TASK_DONE, KEY_TASK_ID, id, KEY_DATE, date.toString());
+                    TABLE_TASK_DONE, KEY_TASK_ID, id, KEY_DATE, dateFormat.format(date));
             db.execSQL(query);
         }
     }
