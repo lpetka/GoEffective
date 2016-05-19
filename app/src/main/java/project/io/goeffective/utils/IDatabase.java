@@ -8,7 +8,7 @@ import java.util.List;
 import project.io.goeffective.utils.dbobjects.Task;
 
 public interface IDatabase {
-    void addTask(Task task);
+    Task addTask(Task task);
     void removeTask(Task task);
     void updateTask(Task task);
     List<Pair<Task, Boolean>> getTasksStatusAtDate(Date date);

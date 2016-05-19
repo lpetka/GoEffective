@@ -118,10 +118,11 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
     @Override
-    public void addTask(Task task) {
+    public Task addTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         Long taskId = db.insert(TABLE_TASK, null, createContentValueTask(task));
         addTaskStart(db, task, taskId.intValue());
+        return getTaskFromDatabase(db, taskId.intValue());
     }
 
     private String removeQuery(String tableName, String idName, Integer id){
