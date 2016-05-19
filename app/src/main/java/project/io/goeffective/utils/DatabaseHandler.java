@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -337,9 +338,17 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         }
     }
 
-    public List<Boolean> getTaskHistory(Task task, int days) {
-
-        return null;
+    public List<Boolean> getTaskHistory(Task task, Date date, int days) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        TaskDate taskDate = new TaskDate(task.getTaskStartList(), date);
+        List<Boolean> history = new LinkedList<>();
+        for(int i = 0; i<days; i++){
+            if(taskDate.hasPrevDay()){
+                Date prev = taskDate.getPrevTaskDate();
+                history.add(checkTaskStatusAtDate(db, task.getId(), prev));
+            }
+        }
+        return history;
     }
 
     public List<Boolean> getTaskHistoryUntilFalse(Task task){
