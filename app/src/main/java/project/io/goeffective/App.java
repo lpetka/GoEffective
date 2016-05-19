@@ -7,7 +7,7 @@ import project.io.goeffective.di.DIComponent;
 
 public class App extends Application
 {
-    private DIComponent component;
+    private static DIComponent component;
 
     private void buildComponentAndInject()
     {
@@ -22,8 +22,7 @@ public class App extends Application
         buildComponentAndInject();
     }
 
-    public static DIComponent component(Context context)
-    {
-        return ((App) context.getApplicationContext()).component;
+    public static DIComponent getComponent() {
+        return component;
     }
 }
