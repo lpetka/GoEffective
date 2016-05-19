@@ -18,7 +18,9 @@ public class AddTaskModel implements IAddTaskModel {
 
     @Override
     public Task createTask(String name) {
-        return null;
+        Task newTask = new Task(name);
+        Task task = databaseHandler.addTask(newTask);
+        return task;
     }
 
     @Override
