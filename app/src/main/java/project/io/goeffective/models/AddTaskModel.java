@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import project.io.goeffective.utils.DatabaseHandler;
 import project.io.goeffective.utils.dbobjects.Task;
+import project.io.goeffective.utils.dbobjects.TaskStart;
 
 public class AddTaskModel implements IAddTaskModel {
     @Inject
@@ -26,7 +27,9 @@ public class AddTaskModel implements IAddTaskModel {
 
     @Override
     public void addEveryWeek(Task task, Date date) {
-
+        TaskStart taskStart = new TaskStart(task.getId(), date, 7);
+        task.addTaskStart(taskStart);
+        databaseHandler.updateTask(task);
     }
 
     @Override
