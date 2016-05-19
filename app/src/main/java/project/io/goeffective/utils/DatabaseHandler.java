@@ -7,13 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 
 import project.io.goeffective.utils.dbobjects.Task;
@@ -272,6 +275,68 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         return list;
     }
     
+    private class TaskDate {
+        private List<TaskStart> taskStartList;
+        private List<Date> lastTaskDateList;
+        private Date date;
+        public TaskDate(List<TaskStart> tlist, Date today){
+            taskStartList = tlist;
+            date = (Date)today.clone();
+            lastTaskDateList = new ArrayList<>(tlist.size());
+            for (TaskStart taskStart: taskStartList) {
+                lastTaskDateList.add(getLastDate(date, taskStart));
+            }
+        }
+
+        private Date getLastDate(Date date, TaskStart taskStart){
+            long diff = taskStart.getStart().getTime() - date.getTime();
+            long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DAY_OF_MONTH, -((int)dayDiff%taskStart.getDelay()));
+            return cal.getTime();
+        }
+
+        private boolean isSameDay(Date first, Date second){
+            Long firstDays = TimeUnit.DAYS.convert(first.getTime(), TimeUnit.MILLISECONDS);
+            Long secondDays = TimeUnit.DAYS.convert(second.getTime(), TimeUnit.MILLISECONDS);
+            return firstDays == secondDays;
+        }
+
+        private Date getPrevDate(Date date, TaskStart taskStart){
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+            return getLastDate(cal.getTime(), taskStart);
+        }
+
+        public Date getPrevTaskDate(){
+            Date lastDate = lastTaskDateList.get(0);
+            for(int i = 0; i<lastTaskDateList.size(); i++){
+                if(lastDate.before(lastTaskDateList.get(i))){
+                    lastDate = lastTaskDateList.get(i);
+                }
+            }
+            for(int i = 0; i<lastTaskDateList.size(); i++){
+                if(isSameDay(lastDate, lastTaskDateList.get(i))){
+                    lastTaskDateList.set(i, getPrevDate(lastTaskDateList.get(i), taskStartList.get(i)));
+                }
+            }
+            return lastDate;
+        }
+
+        public boolean hasPrevDay(){
+            if(lastTaskDateList.isEmpty()){
+                return false;
+            }
+            boolean taskAfterStart = false;
+            for(int i = 0; i<lastTaskDateList.size(); i++){
+                taskAfterStart &= taskStartList.get(i).getStart().before(lastTaskDateList.get(i));
+            }
+            return taskAfterStart;
+        }
+    }
+
     public List<Boolean> getTaskHistory(Task task, int days) {
 
         return null;
