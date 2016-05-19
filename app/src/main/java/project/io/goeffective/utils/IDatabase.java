@@ -15,4 +15,6 @@ public interface IDatabase {
     List<Task> getTasksAtDate(Date date);
     void setTaskStatusAtDate(Date date, Task task, Boolean flag);
     List<Task> getTasksList();
+    List<Boolean> getTaskHistory(Task task, int days);
+    List<Boolean> getTaskHistoryUntilFalse(Task task);
 }
