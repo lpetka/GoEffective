@@ -8,4 +8,5 @@
     <dimen name="custom_tab_layout_height">72dp</dimen>
     <dimen name="taskMarkSize">12dp</dimen>
     <dimen name="taskMarkBorder">0dp</dimen>
+    <dimen name="taskNameSize">17sp</dimen>
 </resources>
