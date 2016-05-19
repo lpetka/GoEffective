@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.inject.Inject;
 
 import project.io.goeffective.utils.DatabaseHandler;
+import project.io.goeffective.utils.dbobjects.Task;
 
 public class AddTaskModel implements IAddTaskModel {
     @Inject
