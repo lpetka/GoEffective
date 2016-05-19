@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Task {
-    String name;
-    List<Boolean> history;
+    private final String name;
+    private final List<Boolean> history;
 
     public Task(String name, List<Boolean> history) {
         this.name = name;
@@ -13,8 +13,7 @@ public class Task {
     }
 
     public Task(String name) {
-        this.name = name;
-        this.history = new LinkedList<>();
+        this(name, new LinkedList<>());
     }
 
     public String getName() {
