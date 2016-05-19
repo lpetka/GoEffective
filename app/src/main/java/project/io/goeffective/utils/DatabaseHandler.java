@@ -351,8 +351,16 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         return history;
     }
 
-    public List<Boolean> getTaskHistoryUntilFalse(Task task){
-
-        return null;
+    public List<Boolean> getTaskHistoryUntilFalse(Task task, Date date){
+        SQLiteDatabase db = this.getReadableDatabase();
+        TaskDate taskDate = new TaskDate(task.getTaskStartList(), date);
+        List<Boolean> history = new LinkedList<>();
+        boolean prevDateStatus = true;
+        while (taskDate.hasPrevDay() && prevDateStatus){
+            Date prev = taskDate.getPrevTaskDate();
+            prevDateStatus = checkTaskStatusAtDate(db, task.getId(), prev);
+            history.add(prevDateStatus);
+        }
+        return history;
     }
 }
