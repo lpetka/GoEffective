@@ -17,11 +17,6 @@ public class TasksListPresenter extends Presenter<ITasksListView> {
     @Override
     public void start() {
         super.start();
-        this.subscriptions.add(view.addTaskClick().observeOn(uiThread).subscribe(o ->
-            {
-                navigator.openAddTaskActivity();
-            }
-        ));
 
         this.subscriptions.add(view.addDummyTaskClick().observeOn(uiThread).subscribe(o ->
             {
