@@ -11,7 +11,7 @@ import butterknife.InjectView;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
 import project.io.goeffective.fragments.CalendarFragment;
-import project.io.goeffective.fragments.HabitFragment;
+import project.io.goeffective.fragments.TasksListFragment;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.MainPresenter;
 import project.io.goeffective.services.Navigator;
@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     private void setupViewPager() {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new CalendarFragment(), "Kalendarz");
-        viewPagerAdapter.addFragment(new HabitFragment(), "Nawyki");
+        viewPagerAdapter.addFragment(new TasksListFragment(), "Nawyki");
         viewPager.setAdapter(viewPagerAdapter);
     }
 
