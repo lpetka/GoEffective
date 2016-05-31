@@ -184,17 +184,16 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
 
     private List<TaskStart> getTaskStartFromDatabase(SQLiteDatabase db, Integer id){
-        String taskStartQuery = String.format("Select %s, date(%s), %s from %s where %s = %s;",
-                KEY_ID, KEY_START, KEY_DELAY, TABLE_TASK_START, KEY_TASK_ID, String.valueOf(id));
+        String taskStartQuery = String.format("Select date(%s), %s from %s where %s = %s;",
+                KEY_START, KEY_DELAY, TABLE_TASK_START, KEY_TASK_ID, String.valueOf(id));
         Cursor cursor = db.rawQuery(taskStartQuery, null);
         List<TaskStart> list = new ArrayList<>();
         if(cursor.moveToFirst()){
             do {
                 try{
-                Integer taskStartId = cursor.getInt(0);
-                Date start = dateFormat.parse(cursor.getString(1));
-                Integer delay = cursor.getInt(2);
-                TaskStart taskStart = new TaskStart(taskStartId, start, delay);
+                Date start = dateFormat.parse(cursor.getString(0));
+                Integer delay = cursor.getInt(1);
+                TaskStart taskStart = new TaskStart(start, delay);
                 list.add(taskStart);
                 } catch (ParseException e) {}
             } while (cursor.moveToNext());

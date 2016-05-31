@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TaskStart implements Serializable{
-    private Integer id;
     private Date start;
     private Integer delay;
 
-    public TaskStart(Integer id, Date date, Integer delay){
-        this.id = id;
+    public TaskStart(Date date, Integer delay){
         this.start = date;
         this.delay = delay;
     }
@@ -20,9 +18,5 @@ public class TaskStart implements Serializable{
 
     public Date getStart() {
         return start;
-    }
-
-    public Integer getId() {
-        return id;
     }
 }
