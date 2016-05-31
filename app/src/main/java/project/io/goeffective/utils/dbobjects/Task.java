@@ -3,6 +3,7 @@ package project.io.goeffective.utils.dbobjects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Task implements Serializable{
@@ -39,5 +40,10 @@ public class Task implements Serializable{
 
     public void addTaskStart(TaskStart taskStart){
         taskStartList.add(taskStart);
+    }
+
+    public void addEveryWeek(Date date) {
+        TaskStart taskStart = new TaskStart(date, 7);
+        this.addTaskStart(taskStart);
     }
 }
