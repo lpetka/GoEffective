@@ -255,7 +255,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     public List<Task> getTasksList() {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Task> list = new ArrayList<>();
-        String query = String.format("Select %s from %s;",KEY_TASK_ID ,TABLE_TASK);
+        String query = String.format("Select %s from %s;", KEY_ID, TABLE_TASK);
         Cursor cursor = db.rawQuery(query, null);
         Set<Integer> task_id = new HashSet<>();
         if(cursor.moveToFirst()){
