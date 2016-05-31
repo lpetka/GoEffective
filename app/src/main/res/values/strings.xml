@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">GoEffective</string>
+    <string name="action_preferences">Ustawienia</string>
+    <string name="action_select_task">Wybierz zadanie</string>
     <string name="action_favorite">Preferences</string>
     <string name="yes">tak</string>
     <string name="no">nie</string>

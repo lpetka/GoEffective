@@ -2,10 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <!-- "Mark Preferences", should appear as action button if possible -->
-        <item
-            android:id="@+id/action_preferences"
-            android:icon="@mipmap/preferences"
-            android:title="@string/action_favorite"
-            app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_select_task"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/action_select_task"
+        app:showAsAction="ifRoom" />
+
+    <!-- "Mark Preferences", should appear as action button if possible -->
+    <item
+        android:id="@+id/action_preferences"
+        android:icon="@mipmap/preferences"
+        android:title="@string/action_preferences"
+        app:showAsAction="ifRoom" />
 </menu>
