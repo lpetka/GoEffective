@@ -2,7 +2,7 @@ package project.io.goeffective.utils;
 
 
 public final class StringConstants {
-    public static final String FRAGMENT_RESOURCE_ID = "fragmentResourceId";
+    public static final String EXAMPLE_CONST = "value";
 
     private StringConstants() {}
 }
