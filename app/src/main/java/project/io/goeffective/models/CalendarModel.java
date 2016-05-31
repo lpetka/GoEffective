@@ -1,24 +1,15 @@
 package project.io.goeffective.models;
 
 import android.content.Context;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import project.io.goeffective.utils.DatabaseHandler;
-import project.io.goeffective.utils.dbobjects.Task;
+import java.util.Random;
 
 public class CalendarModel implements ICalendarModel{
-    @Inject
-    DatabaseHandler databaseHandler;
-
-    @Inject
-    Context context;
+    private TaskStatus[] t = new TaskStatus[]{TaskStatus.DONE, TaskStatus.PARTLY_DONE, TaskStatus.NOT_DONE};
+    private Random random = new Random();
 
     public CalendarModel(){}
 
@@ -27,19 +18,8 @@ public class CalendarModel implements ICalendarModel{
         if(current.compareTo(calendar) < 0){
             return TaskStatus.FUTURE;
         }
-        List<Pair<Task, Boolean>> taskStatuses = databaseHandler.getTasksStatusAtDate(calendar.getTime());
-        boolean partlyDone = false;
-        boolean allDone = true;
-        for (Pair<Task, Boolean> pair: taskStatuses) {
-            partlyDone = partlyDone  || pair.second;
-            allDone = allDone || pair.second;
-        }
-        if(allDone){
-            return TaskStatus.DONE;
-        } else if (partlyDone){
-            return TaskStatus.PARTLY_DONE;
-        }
-        return TaskStatus.NOT_DONE;
+        int r = random.nextInt(3);
+        return t[r];
     }
 
     @Override
