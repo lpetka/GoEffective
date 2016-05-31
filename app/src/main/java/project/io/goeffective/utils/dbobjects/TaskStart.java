@@ -1,8 +1,9 @@
 package project.io.goeffective.utils.dbobjects;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TaskStart {
+public class TaskStart implements Serializable{
     private Integer id;
     private Date start;
     private Integer delay;
