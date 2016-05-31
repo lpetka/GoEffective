@@ -3,6 +3,7 @@ package project.io.goeffective.di;
 import javax.inject.Singleton;
 import dagger.Component;
 import project.io.goeffective.App;
+import project.io.goeffective.activities.TaskEditActivity;
 import project.io.goeffective.fragments.TasksListFragment;
 import project.io.goeffective.models.TaskListModel;
 import project.io.goeffective.utils.DatabaseHandler;
@@ -18,6 +19,7 @@ public interface DIComponent {
     void inject(App app);
     void inject(TaskListModel taskListModel);
     void inject(TasksListFragment    tasksListFragment);
+    void inject(TaskEditActivity taskEditActivity);
 
     DatabaseHandler provideDatabaseHandler();
 

@@ -1,7 +1,5 @@
 package project.io.goeffective.models;
 
-import android.content.Context;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,11 +12,8 @@ public class TaskListModel implements ITaskListModel {
     @Inject
     DatabaseHandler databaseHandler;
 
-    @Inject
-    Context context;
-
     public TaskListModel() {
-        App.component(context).inject(this);
+        App.getComponent().inject(this);
     }
 
     @Override
