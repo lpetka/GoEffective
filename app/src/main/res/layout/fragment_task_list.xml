@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="project.io.goeffective.fragments.TasksListFragment">
+
+    <Button
+        android:id="@+id/add_dummy_task_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Nowe zadanie" />
+
+    <ListView
+        android:id="@+id/task_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_dummy_task_button"
+        android:divider="@color/list_divider"
+        android:dividerHeight="1dp"
+        android:focusable="true"
+        android:listSelector="@drawable/list_row_selector" />
+
+</RelativeLayout>

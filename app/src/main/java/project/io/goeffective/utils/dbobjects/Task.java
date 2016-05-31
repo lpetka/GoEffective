@@ -1,10 +1,11 @@
 package project.io.goeffective.utils.dbobjects;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task {
+public class Task implements Serializable{
     private final Integer id;
     private String name;
     private List<TaskStart> taskStartList = new ArrayList<>();

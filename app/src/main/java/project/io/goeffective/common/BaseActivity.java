@@ -32,8 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.presenter = this.createPresenter(this, savedInstanceState);
     }
 
-    protected void onViewReady()
-    {
+    protected void onViewReady() {
 
     }
 
