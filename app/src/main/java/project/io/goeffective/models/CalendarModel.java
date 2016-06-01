@@ -36,13 +36,16 @@ public class CalendarModel implements ICalendarModel {
 
     public TaskStatus getTaskStatus(Calendar calendar) {
         final Date date = calendar.getTime();
-        final List<Pair<Task, Boolean>> tasksStatusAtDate = databaseHandler.getTasksStatusAtDate(date);
+
+        if (Calendar.getInstance().getTime().compareTo(date) < 0) {
+            return TaskStatus.DOES_NOT_MATTER;
+        }
 
         boolean isEveryTaskDone = true;
         boolean isEveryTaskNotDone = true;
+        final List<Pair<Task, Boolean>> tasksStatusAtDate = databaseHandler.getTasksStatusAtDate(date);
         for (Pair<Task, Boolean> taskIsDonePair : tasksStatusAtDate) {
             Task task = taskIsDonePair.first;
-            System.out.println("TaskDate " + task.getName() + " " + date.toString());
             if (calendarTasks.contains(task)) {
                 Boolean isTaskDone = taskIsDonePair.second;
                 if (isTaskDone) {
