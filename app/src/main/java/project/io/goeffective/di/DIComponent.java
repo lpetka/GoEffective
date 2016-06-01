@@ -7,6 +7,7 @@ import project.io.goeffective.activities.TaskEditActivity;
 import project.io.goeffective.fragments.TasksListFragment;
 import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.DayModel;
+import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.TaskListModel;
 import project.io.goeffective.presenters.AddTaskPresenter;
 import project.io.goeffective.presenters.PreferencesPresenter;
