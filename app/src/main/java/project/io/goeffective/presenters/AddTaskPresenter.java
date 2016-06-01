@@ -95,6 +95,7 @@ public class AddTaskPresenter extends Presenter<IAddTaskView> {
                         Calendar.getInstance().get(Calendar.MONTH),
                         Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
                 );
+                date.add(Calendar.DATE, -70);
                 while (date.get(Calendar.DAY_OF_WEEK) != myDay)
                     date.add(Calendar.DATE, 1);
                 task.addTaskStart(new TaskStart(date.getTime(), 7));

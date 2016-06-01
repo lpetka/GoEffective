@@ -38,14 +38,11 @@ public class CalendarModel implements ICalendarModel {
         final Date date = calendar.getTime();
         final List<Pair<Task, Boolean>> tasksStatusAtDate = databaseHandler.getTasksStatusAtDate(date);
 
-        if (tasksStatusAtDate.isEmpty()) {
-            return TaskStatus.DOES_NOT_MATTER;
-        }
-
         boolean isEveryTaskDone = true;
         boolean isEveryTaskNotDone = true;
         for (Pair<Task, Boolean> taskIsDonePair : tasksStatusAtDate) {
             Task task = taskIsDonePair.first;
+            System.out.println("TaskDate " + task.getName() + " " + date.toString());
             if (calendarTasks.contains(task)) {
                 Boolean isTaskDone = taskIsDonePair.second;
                 if (isTaskDone) {
@@ -56,10 +53,12 @@ public class CalendarModel implements ICalendarModel {
             }
         }
 
+        if (isEveryTaskDone && isEveryTaskNotDone) {
+            return TaskStatus.DOES_NOT_MATTER;
+        }
         if (isEveryTaskDone) {
             return TaskStatus.DONE;
         }
-
         if (isEveryTaskNotDone) {
             return TaskStatus.NOT_DONE;
         }

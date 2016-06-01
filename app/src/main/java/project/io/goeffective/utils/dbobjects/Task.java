@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Task implements Serializable{
+public class Task implements Serializable {
     private final Integer id;
     private String name;
     private boolean notification = true;
@@ -71,5 +71,23 @@ public class Task implements Serializable{
 
     public void setNotification(boolean notification) {
         this.notification = notification;
+    }
+
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (other instanceof Task) {
+            Task otherTask = (Task) other;
+            return this.getId().equals(otherTask.getId());
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
