@@ -17,12 +17,13 @@ import project.io.goeffective.R;
 import project.io.goeffective.models.IDayModel;
 import project.io.goeffective.utils.dbobjects.Task;
 import project.io.goeffective.models.DayTaskModel;
+import project.io.goeffective.utils.dbobjects.Task;
 
 public class DayTaskAdapter extends BaseAdapter {
     static int MAX_HISTORY_LENGTH = 5;
-    List<DayTaskModel> dayTaskModels;
     private Context context;
     private IDayModel model;
+    private List<Task> tasks;
 
     public DayTaskAdapter(Context context, IDayModel model) {
         this.context = context;
@@ -83,7 +84,6 @@ public class DayTaskAdapter extends BaseAdapter {
     private View createTaskProgressView(DayTaskModel dayTaskModel) {
         LinearLayout linearLayout = new LinearLayout(context);
         List<Boolean> taskHistory = model.getHistory(task);
-
         final int size = taskHistory.size();
         if (size > MAX_HISTORY_LENGTH) {
             taskHistory = taskHistory.subList(size - MAX_HISTORY_LENGTH, size);
@@ -134,5 +134,6 @@ public class DayTaskAdapter extends BaseAdapter {
     public void toggle(int i) {
         Task task = (Task) getItem(i);
         model.toggle(task);
+        notifyDataSetChanged();
     }
 }
