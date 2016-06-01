@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import butterknife.InjectView;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
+import project.io.goeffective.models.DayModel;
+import project.io.goeffective.models.IDayModel;
 import project.io.goeffective.presenters.DayPresenter;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.utils.dbobjects.Task;
@@ -33,6 +35,6 @@ public class DayActivity extends BaseActivity implements IDayView {
     @Override
     protected void onViewReady() {
         this.date = (Date) getIntent().getSerializableExtra("date");
-
+        dayView.setModel(new DayModel(date));
     }
 }

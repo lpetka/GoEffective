@@ -13,7 +13,7 @@ import project.io.goeffective.widgets.adapters.DayTaskAdapter;
 public class DayView extends LinearLayout {
     private Context context;
     ListView taskListView;
-    private IDayModel model = new DayModel();
+    private IDayModel model;
 
     public DayView(Context context) {
         super(context);
@@ -33,6 +33,10 @@ public class DayView extends LinearLayout {
     private void setupView(Context context) {
         this.context = context;
         this.setOrientation(VERTICAL);
+    }
+
+    public void setModel(IDayModel model){
+        this.model = model;
         addTasksList();
     }
 

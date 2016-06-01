@@ -15,16 +15,26 @@ import java.util.List;
 
 import project.io.goeffective.R;
 import project.io.goeffective.models.IDayModel;
+<<<<<<< f8f6553777161d1b1993f0d9803430261ec338df
 import project.io.goeffective.models.DayTaskModel;
+=======
+import project.io.goeffective.utils.dbobjects.Task;
+>>>>>>> Removed model.Task. Pushed model initialized by date to DayView.
 
 public class DayTaskAdapter extends BaseAdapter {
     static int MAX_HISTORY_LENGTH = 5;
     List<DayTaskModel> dayTaskModels;
     private Context context;
+    private IDayModel model;
 
     public DayTaskAdapter(Context context, IDayModel model) {
         this.context = context;
+<<<<<<< f8f6553777161d1b1993f0d9803430261ec338df
         this.dayTaskModels = model.getTodayTasks();
+=======
+        this.tasks = model.getTodayTasks();
+        this.model = model;
+>>>>>>> Removed model.Task. Pushed model initialized by date to DayView.
     }
 
     @Override
@@ -80,7 +90,11 @@ public class DayTaskAdapter extends BaseAdapter {
     private View createTaskProgressView(DayTaskModel dayTaskModel) {
         LinearLayout linearLayout = new LinearLayout(context);
 
+<<<<<<< f8f6553777161d1b1993f0d9803430261ec338df
         List<Boolean> taskHistory = dayTaskModel.getHistory();
+=======
+        List<Boolean> taskHistory = model.getHistory(task);
+>>>>>>> Removed model.Task. Pushed model initialized by date to DayView.
         final int size = taskHistory.size();
         if (size > MAX_HISTORY_LENGTH) {
             taskHistory = taskHistory.subList(size - MAX_HISTORY_LENGTH, size);
@@ -118,9 +132,9 @@ public class DayTaskAdapter extends BaseAdapter {
         textView.setWidth(70);
         return textView;
     }
-
-    private String getDaysInARowLabel(DayTaskModel dayTaskModel) {
-        final int daysInARow = dayTaskModel.countDaysInARow();
+    
+    private String getDaysInARowLabel(Task task) {
+        final int daysInARow = model.countDaysInARow(task);
         String historyLengthLabel = "";
         if (daysInARow > 0) {
             historyLengthLabel = Integer.toString(daysInARow);
@@ -129,8 +143,8 @@ public class DayTaskAdapter extends BaseAdapter {
     }
 
     public void toggle(int i) {
-        DayTaskModel dayTaskModel = (DayTaskModel) getItem(i);
-        dayTaskModel.toggle();
+        Task task = (Task) getItem(i);
+        model.toggle(task);
         notifyDataSetChanged();
     }
 }
