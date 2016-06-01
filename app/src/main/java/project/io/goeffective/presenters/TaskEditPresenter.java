@@ -71,7 +71,7 @@ public class TaskEditPresenter extends Presenter<ITaskEditView> {
         for (int i = 0; i < checked.length; i++) {
             if (checked[i]) {
                 //in Gregorian Calendar day number 1 is Sunday
-                int myDay = (i + 2) % 7;
+                int myDay = (i + 2) % 7 + 1;
                 date = new GregorianCalendar(
                         Calendar.getInstance().get(Calendar.YEAR),
                         Calendar.getInstance().get(Calendar.MONTH),

@@ -66,7 +66,7 @@ public class TaskEditActivity extends BaseActivity implements ITaskEditView {
         for(TaskStart taskStart: task.getTaskStartList()) {
             calendar = Calendar.getInstance();
             calendar.setTime(taskStart.getStart());
-            checkedDay = (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7;
+            checkedDay = (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7 - 1;
             if(checkedDay < 0)
                 checkedDay += 7;
             weekDayListAdapter.setChecked(checkedDay);

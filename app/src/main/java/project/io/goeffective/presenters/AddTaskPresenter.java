@@ -89,7 +89,7 @@ public class AddTaskPresenter extends Presenter<IAddTaskView> {
         for(int i = 0; i < checked.length; i++) {
             if(checked[i]) {
                 //in Gregorian Calendar day number 1 is Sunday
-                int myDay = (i + 2) % 7;
+                int myDay = (i + 2) % 7 + 1;
                 date = new GregorianCalendar(
                         Calendar.getInstance().get(Calendar.YEAR),
                         Calendar.getInstance().get(Calendar.MONTH),
@@ -106,7 +106,7 @@ public class AddTaskPresenter extends Presenter<IAddTaskView> {
 
     private int validateData(EditText taskName, WeekDayView weekDayListSelector) {
         if(taskName.getText().toString().matches(""))
-            return 1;
+                return 1;
 
         WeekDayListAdapter weekDayListAdapter = (WeekDayListAdapter) weekDayListSelector.getAdapter();
         boolean[] checked = weekDayListAdapter.getChecked();
