@@ -12,6 +12,7 @@ import project.io.goeffective.R;
 
 public class WeekDayListAdapter extends BaseAdapter {
     final String[] weekDayNames;
+    private boolean[] checked = new boolean[7];
     private final Context context;
 
     public WeekDayListAdapter(Context context) {
@@ -48,6 +49,8 @@ public class WeekDayListAdapter extends BaseAdapter {
         layout.addView(weekDayTextView);
 
         CheckBox checkBox = new CheckBox(context);
+        checkBox.setChecked(checked[i]);
+        checkBox.setOnCheckedChangeListener(((buttonView, isChecked) -> checked[i] = isChecked));
         RelativeLayout.LayoutParams rightParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
@@ -55,7 +58,14 @@ public class WeekDayListAdapter extends BaseAdapter {
         layout.addView(checkBox);
 
         layout.setOnClickListener(view1 -> checkBox.toggle());
-
         return layout;
+    }
+
+    public boolean[] getChecked() {
+        return checked;
+    }
+
+    public void setChecked(int index) {
+        this.checked[index] = true;
     }
 }
