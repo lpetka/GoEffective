@@ -10,4 +10,5 @@ public interface IAddTaskView {
     EditText getNoteInput();
     EditText getTaskName();
     WeekDayView getWeekDayListSelector();
+    void close();
 }

@@ -55,4 +55,9 @@ public class TaskAddActivity extends BaseActivity implements IAddTaskView {
     public WeekDayView getWeekDayListSelector() {
         return weekDayListSelector;
     }
+
+    @Override
+    public void close() {
+        this.finish();
+    }
 }

@@ -7,6 +7,7 @@ import project.io.goeffective.activities.TaskEditActivity;
 import project.io.goeffective.fragments.TasksListFragment;
 import project.io.goeffective.models.TaskListModel;
 import project.io.goeffective.presenters.AddTaskPresenter;
+import project.io.goeffective.presenters.PreferencesPresenter;
 import project.io.goeffective.presenters.TaskEditPresenter;
 import project.io.goeffective.utils.DatabaseHandler;
 import project.io.goeffective.utils.DatabaseHandlerModule;
@@ -24,6 +25,7 @@ public interface DIComponent {
     void inject(TaskEditActivity taskEditActivity);
     void inject(AddTaskPresenter addTaskPresenter);
     void inject (TaskEditPresenter taskEditPresenter);
+    void inject(PreferencesPresenter preferencesPresenter);
 
     DatabaseHandler provideDatabaseHandler();
 

@@ -1,5 +1,6 @@
 package project.io.goeffective.presenters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -10,6 +11,7 @@ import java.util.GregorianCalendar;
 import javax.inject.Inject;
 
 import project.io.goeffective.App;
+import project.io.goeffective.R;
 import project.io.goeffective.activities.TaskAddActivity;
 import project.io.goeffective.services.INavigator;
 import project.io.goeffective.utils.DatabaseHandler;
@@ -52,7 +54,7 @@ public class AddTaskPresenter extends Presenter<IAddTaskView> {
     private void createTask(EditText taskName, WeekDayView weekDayListSelector, EditText noteInput) {
         switch(validateData(taskName, weekDayListSelector)) {
             case 0:     //valid
-                addTask(taskName, weekDayListSelector, noteInput);
+                showDialog(taskName, weekDayListSelector, noteInput);
                 break;
             case 1:     //empty task name
                 Toast.makeText(context, "Podaj nazwę zadania.", Toast.LENGTH_SHORT).show();
@@ -63,16 +65,26 @@ public class AddTaskPresenter extends Presenter<IAddTaskView> {
         }
     }
 
+    private void showDialog(EditText taskName, WeekDayView weekDayListSelector, EditText noteInput) {
+        new AlertDialog.Builder(context)
+                .setTitle("Dodawanie zadanie")
+                .setMessage("Czy chcesz utworzyć to zadanie?")
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    addTask(taskName, weekDayListSelector, noteInput);
+                    view.close();
+                })
+                .setNegativeButton(R.string.no, (dialog, which) -> {
+                    // do nothing
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+
     private void addTask(EditText taskName, WeekDayView weekDayListSelector, EditText noteInput) {
         Task task = new Task(taskName.getText().toString());
         WeekDayListAdapter weekDayListAdapter = (WeekDayListAdapter) weekDayListSelector.getAdapter();
         boolean[] checked = weekDayListAdapter.getChecked();
-        StringBuilder sb = new StringBuilder("");
-        for(int i = 0; i < checked.length; i++) {
-            if(checked[i])
-                sb.append(i).append(" ");
-        }
-        Toast.makeText(context, sb.toString(),Toast.LENGTH_SHORT).show();
         GregorianCalendar date;
         for(int i = 0; i < checked.length; i++) {
             if(checked[i]) {
@@ -85,10 +97,10 @@ public class AddTaskPresenter extends Presenter<IAddTaskView> {
                 );
                 while (date.get(Calendar.DAY_OF_WEEK) != myDay)
                     date.add(Calendar.DATE, 1);
-                task.addTaskStart(new TaskStart(-1, date.getTime(), 7));
+                task.addTaskStart(new TaskStart(date.getTime(), 7));
             }
         }
-        //task.setNote(noteInput.getText().toString());
+        task.setNote(noteInput.getText().toString());
         databaseHandler.addTask(task);
     }
 
