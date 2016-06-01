@@ -85,7 +85,7 @@ public class CalendarAdapter extends BaseAdapter {
         if(model != null) {
             return model.getTaskStatus(getDate(itemNumber));
         }
-        return TaskStatus.FUTURE;
+        return TaskStatus.DOES_NOT_MATTER;
     }
 
     private int getColor(int itemNumer){
