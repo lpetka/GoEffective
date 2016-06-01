@@ -11,5 +11,6 @@
 
     <project.io.goeffective.widgets.DayView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/day_view"/>
 </RelativeLayout>

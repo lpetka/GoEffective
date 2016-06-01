@@ -18,6 +18,7 @@
         <activity android:name=".activities.PreferencesActivity"/>
         <activity android:name=".activities.TaskEditActivity"/>
         <activity android:name=".activities.TaskAddActivity"/>
+        <activity android:name=".activities.DayActivity"/>
     </application>
 
 </manifest>

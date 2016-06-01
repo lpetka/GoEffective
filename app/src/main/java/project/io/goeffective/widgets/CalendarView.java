@@ -184,4 +184,8 @@ public class CalendarView extends LinearLayout implements ICalendarChanger, ICal
         CalendarAdapter calendarAdapter = new CalendarAdapter(context, cal, model);
         gridView.setAdapter(calendarAdapter);
     }
+
+    public GridView getGridView() {
+        return gridView;
+    }
 }
