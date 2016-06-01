@@ -25,7 +25,7 @@ import project.io.goeffective.utils.dbobjects.TaskStart;
 
 public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "GoEffective";
 
     private static final String TABLE_TASK = "tasks";
@@ -37,6 +37,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
     //Table tasks
     private static final String KEY_NAME = "name";
+    private static final String KEY_NOTIFICATION = "notification";
 
     //Table task_starts
     private static final String KEY_START = "start";
@@ -55,7 +56,9 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     private void createTaskTable(SQLiteDatabase db){
         String CREATE_TASK_TABLE = "CREATE TABLE " + TABLE_TASK + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
-                + KEY_NAME + " TEXT"
+                + KEY_NAME + " TEXT,"
+                + KEY_COMMENT + " TEXT,"
+                + KEY_NOTIFICATION + " INTEGER"
                 + ")";
         db.execSQL(CREATE_TASK_TABLE);
     }
@@ -105,6 +108,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
             values.put(KEY_ID, task.getId());
         }
         values.put(KEY_NAME, task.getName());
+        values.put(KEY_COMMENT, task.getName());
+        values.put(KEY_NOTIFICATION, task.isNotification()?1:0);
         return values;
     }
 
@@ -156,8 +161,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     public void updateTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         deleteTaskStart(db, task);
-        String query = String.format("Update %s set %s = '%s' where %s = %d",
-                TABLE_TASK, KEY_NAME, task.getName(), KEY_ID, task.getId());
+        String query = String.format("Update %s set %s = '%s', %s = %s, %s = %s where %s = %d",
+                TABLE_TASK, KEY_NAME, task.getName(), KEY_COMMENT, task.getNote(), KEY_NOTIFICATION, task.isNotification()?1:0, KEY_ID, task.getId());
         db.execSQL(query);
         addTaskStart(db, task, task.getId());
     }
@@ -202,13 +207,17 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
     private Task getTaskFromDatabase(SQLiteDatabase db, Integer id){
-        String query = String.format("Select %s from %s where %s = %s;", KEY_NAME, TABLE_TASK,
+        String query = String.format("Select %s, %s, %s from %s where %s = %s;",
+                KEY_NAME, KEY_NOTIFICATION,
+                KEY_COMMENT, TABLE_TASK,
                 KEY_ID, String.valueOf(id));
         Cursor cursor = db.rawQuery(query, null);
         if(cursor != null && cursor.moveToFirst()) {
             String name = cursor.getString(0);
+            String comment = cursor.getString(1);
+            boolean notification = cursor.getInt(2) == 1;
             List<TaskStart> taskStarts = getTaskStartFromDatabase(db, id);
-            return new Task(id, name, taskStarts);
+            return new Task(id, name, taskStarts, comment, notification);
         }
         return null;
     }

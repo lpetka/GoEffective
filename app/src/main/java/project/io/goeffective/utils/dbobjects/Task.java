@@ -9,6 +9,8 @@ import java.util.List;
 public class Task implements Serializable{
     private final Integer id;
     private String name;
+    private boolean notification = false;
+    private String note;
     private List<TaskStart> taskStartList = new ArrayList<>();
 
     public Task(Integer id, String name, List<TaskStart> list){
@@ -20,6 +22,14 @@ public class Task implements Serializable{
     public Task(String name){
         this.id = -1;
         this.name = name;
+    }
+
+    public Task(Integer id, String name, List<TaskStart> list, String note, boolean notification){
+        this.id = id;
+        this.name = name;
+        this.taskStartList = list;
+        this.note = note;
+        this.notification = notification;
     }
 
     public Integer getId() {
@@ -45,5 +55,21 @@ public class Task implements Serializable{
     public void addEveryWeek(Date date) {
         TaskStart taskStart = new TaskStart(date, 7);
         this.addTaskStart(taskStart);
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public boolean isNotification() {
+        return notification;
+    }
+
+    public void setNotification(boolean notification) {
+        this.notification = notification;
     }
 }
