@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import java.util.Calendar;
-import java.util.Random;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
+import project.io.goeffective.App;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
 import project.io.goeffective.notifications.NotificationScheduler;
@@ -17,14 +20,17 @@ import project.io.goeffective.notifications.TaskNotificationCreator;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.PreferencesPresenter;
 import project.io.goeffective.services.Navigator;
+import project.io.goeffective.utils.DatabaseHandler;
 import project.io.goeffective.utils.dbobjects.Task;
-import project.io.goeffective.utils.dbobjects.TaskStart;
 import project.io.goeffective.views.IPreferencesView;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
 
 public class PreferencesActivity extends BaseActivity implements IPreferencesView {
+
+    @Inject
+    DatabaseHandler databaseHandler;
 
     @InjectView(R.id.clear_user_data_button)
     Button clearUserDataButton;
@@ -35,22 +41,9 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     @InjectView(R.id.notification_cancel_button)
     Button notificationCancelButton;
 
-    private Random random = new Random();
-
-    private Task randomTask;
-
     public PreferencesActivity() {
         super(R.layout.activity_preferences);
-        createRandomTask();
-    }
-
-    private void createRandomTask() {
-        final int randomId = random.nextInt(100);
-        final String taskName = "Przykładowe zadanie " + randomId;
-        randomTask = new Task(taskName);
-
-        Calendar date = Calendar.getInstance();
-        randomTask.addTaskStart(new TaskStart(date.getTime(), 7));
+        App.getComponent().inject(this);
     }
 
     @Override
@@ -72,14 +65,13 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
 
     private void createNotification() {
         final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(this);
-        final Notification notification = taskNotificationCreator.createNotification(randomTask);
+        final Notification notification = taskNotificationCreator.createNotification(getTasks());
         final Object systemService = getSystemService(Context.NOTIFICATION_SERVICE);
         final NotificationManager notificationManager = (NotificationManager) systemService;
         notificationManager.notify(TaskNotificationCreator.NOTIFICATION_ID, notification);
     }
 
     private void cancelNotification() {
-        final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(this);
         final Object systemService = getSystemService(Context.NOTIFICATION_SERVICE);
         final NotificationManager notificationManager = (NotificationManager) systemService;
         notificationManager.cancel(TaskNotificationCreator.NOTIFICATION_ID);
@@ -88,14 +80,16 @@ public class PreferencesActivity extends BaseActivity implements IPreferencesVie
     private void createScheduledNotification() {
         final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(this);
         final NotificationScheduler notificationScheduler = new NotificationScheduler(this);
-        final Notification notification = taskNotificationCreator.createNotification(randomTask);
-        notificationScheduler.scheduleNotification(notification, TaskNotificationCreator.NOTIFICATION_ID, Calendar.getInstance().getTime());
+        final Notification notification = taskNotificationCreator.createNotification(getTasks());
+        notificationScheduler.scheduleNotification(notification, Calendar.getInstance().getTime());
     }
 
     private void cancelScheduledNotification() {
-        final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(this);
         final NotificationScheduler notificationScheduler = new NotificationScheduler(this);
-        final Notification notification = taskNotificationCreator.createNotification(randomTask);
-        notificationScheduler.cancelNotification(notification, TaskNotificationCreator.NOTIFICATION_ID);
+        notificationScheduler.cancelNotification();
+    }
+
+    private List<Task> getTasks() {
+        return databaseHandler.getTasksAtDate(Calendar.getInstance().getTime());
     }
 }

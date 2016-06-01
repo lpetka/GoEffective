@@ -22,20 +22,21 @@ public class NotificationScheduler {
         }
     }
 
-    public void cancelNotification(Notification notification, int notificationId) {
-        final PendingIntent pendingIntent = createNotificationIntent(notification, notificationId);
+    public void cancelNotification() {
+        final Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
     }
 
-    public void scheduleNotification(Notification notification, int notificationId, long delay) {
-        final PendingIntent pendingIntent = createNotificationIntent(notification, notificationId);
+    public void scheduleNotification(Notification notification, long delay) {
+        final PendingIntent pendingIntent = createNotificationIntent(notification);
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
-    public void scheduleNotification(Notification notification, int notificationId, Date futureDate) {
+    public void scheduleNotification(Notification notification, Date futureDate) {
         final long futureTimeInMillis = getFutureTimeInMillis(futureDate);
-        final PendingIntent pendingIntent = createNotificationIntent(notification, notificationId);
+        final PendingIntent pendingIntent = createNotificationIntent(notification);
         alarmManager.set(AlarmManager.RTC_WAKEUP, futureTimeInMillis, pendingIntent);
     }
 
@@ -45,9 +46,8 @@ public class NotificationScheduler {
         return calendar.getTimeInMillis();
     }
 
-    private PendingIntent createNotificationIntent(Notification notification, int notificationId) {
+    private PendingIntent createNotificationIntent(Notification notification) {
         final Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID_KEY, notificationId);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_KEY, notification);
         return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
