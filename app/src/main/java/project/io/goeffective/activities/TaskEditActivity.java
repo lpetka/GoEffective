@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -59,12 +58,11 @@ public class TaskEditActivity extends BaseActivity implements ITaskEditView {
     }
 
     private void updateView() {
-        String name = task.getName() + " " + task.getId();
-        taskName.setText(name, TextView.BufferType.EDITABLE);
+        taskName.setText(task.getName(), TextView.BufferType.EDITABLE);
+        noteInput.setText(task.getNote(), TextView.BufferType.EDITABLE);
         WeekDayListAdapter weekDayListAdapter = (WeekDayListAdapter) weekDayListSelector.getAdapter();
         int checkedDay;
         Calendar calendar;
-        StringBuilder sb = new StringBuilder("");
         for(TaskStart taskStart: task.getTaskStartList()) {
             calendar = Calendar.getInstance();
             calendar.setTime(taskStart.getStart());
@@ -72,9 +70,7 @@ public class TaskEditActivity extends BaseActivity implements ITaskEditView {
             if(checkedDay < 0)
                 checkedDay += 7;
             weekDayListAdapter.setChecked(checkedDay);
-            sb.append(checkedDay).append(" ");
         }
-        Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
         weekDayListAdapter.notifyDataSetChanged();
     }
 

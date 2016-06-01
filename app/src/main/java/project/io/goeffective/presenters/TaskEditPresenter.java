@@ -21,7 +21,7 @@ import project.io.goeffective.widgets.WeekDayView;
 import project.io.goeffective.widgets.adapters.WeekDayListAdapter;
 import rx.Scheduler;
 
-public class TaskEditPresenter extends Presenter<ITaskEditView>{
+public class TaskEditPresenter extends Presenter<ITaskEditView> {
     private Scheduler uiThread;
     private Context context;
 
@@ -49,7 +49,7 @@ public class TaskEditPresenter extends Presenter<ITaskEditView>{
     }
 
     private void saveTask(Task task, EditText taskName, WeekDayView weekDayListSelector, EditText noteInput) {
-        switch(validateData(taskName, weekDayListSelector)) {
+        switch (validateData(taskName, weekDayListSelector)) {
             case 0:     //valid
                 updateTask(task, taskName, weekDayListSelector, noteInput);
                 break;
@@ -68,8 +68,8 @@ public class TaskEditPresenter extends Presenter<ITaskEditView>{
         WeekDayListAdapter weekDayListAdapter = (WeekDayListAdapter) weekDayListSelector.getAdapter();
         boolean[] checked = weekDayListAdapter.getChecked();
         GregorianCalendar date;
-        for(int i = 0; i < checked.length; i++) {
-            if(checked[i]) {
+        for (int i = 0; i < checked.length; i++) {
+            if (checked[i]) {
                 //in Gregorian Calendar day number 1 is Sunday
                 int myDay = (i + 2) % 7;
                 date = new GregorianCalendar(
@@ -79,20 +79,21 @@ public class TaskEditPresenter extends Presenter<ITaskEditView>{
                 );
                 while (date.get(Calendar.DAY_OF_WEEK) != myDay)
                     date.add(Calendar.DATE, 1);
-                task.addTaskStart(new TaskStart(-1, date.getTime(), 7));
+                task.addTaskStart(new TaskStart(date.getTime(), 7));
             }
         }
+        task.setNote(noteInput.getText().toString());
         databaseHandler.updateTask(task);
     }
 
     private int validateData(EditText taskName, WeekDayView weekDayListSelector) {
-        if(taskName.getText().toString().matches(""))
+        if (taskName.getText().toString().matches(""))
             return 1;
 
         WeekDayListAdapter weekDayListAdapter = (WeekDayListAdapter) weekDayListSelector.getAdapter();
         boolean[] checked = weekDayListAdapter.getChecked();
         int i = 0;
-        while(i < checked.length) {
+        while (i < checked.length) {
             if (checked[i])
                 return 0;
             i++;

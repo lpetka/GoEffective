@@ -2,7 +2,6 @@ package project.io.goeffective.services;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import project.io.goeffective.activities.PreferencesActivity;
 import project.io.goeffective.activities.TaskAddActivity;

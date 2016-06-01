@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -54,7 +53,6 @@ public class TasksListFragment extends BaseFragment implements ITasksListView {
         taskList.setOnItemClickListener((parent, view1, position, id) -> {
             Task task = (Task) parent.getItemAtPosition(position);
             navigator.openTaskEditActivity(task);
-            Toast.makeText(getContext(), task.getName() + " " + task.getId(), Toast.LENGTH_SHORT).show();
         });
         taskListAdapter = new TaskListAdapter(getContext(), new TaskListModel());
         taskList.setAdapter(taskListAdapter);
