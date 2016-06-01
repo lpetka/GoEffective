@@ -9,6 +9,7 @@ import android.support.v4.app.TaskStackBuilder;
 
 import project.io.goeffective.R;
 import project.io.goeffective.activities.MainActivity;
+import project.io.goeffective.utils.dbobjects.Task;
 
 public class TaskNotificationCreator {
     public static final int NOTIFICATION_ID = 1;
@@ -37,11 +38,7 @@ public class TaskNotificationCreator {
     }
 
     private int getTaskActionIcon(Task task) {
-        if (task.isDone()) {
-            return R.drawable.day_task_done_icon;
-        } else {
-            return R.drawable.day_task_not_done_icon;
-        }
+        return R.drawable.day_task_not_done_icon;
     }
 
     private PendingIntent getPendingMainActivityIntent() {

@@ -47,8 +47,8 @@ public class NotificationScheduler {
 
     private PendingIntent createNotificationIntent(Notification notification, int notificationId) {
         final Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationId);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID_KEY, notificationId);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_KEY, notification);
         return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

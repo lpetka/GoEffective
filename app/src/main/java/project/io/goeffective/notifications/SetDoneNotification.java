@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import project.io.goeffective.utils.dbobjects.Task;
+
 public class SetDoneNotification extends BroadcastReceiver {
 
     public static final String NOTIFICATION_ID = "notification-id";
@@ -20,7 +22,7 @@ public class SetDoneNotification extends BroadcastReceiver {
         String taskName = task.getName();
         Log.d(taskName, "" + taskId);
 
-        task.setDone();
+        // set done
         final TaskNotificationCreator taskNotificationCreator = new TaskNotificationCreator(context);
         final Notification notification = taskNotificationCreator.createNotification(task);
         final Object systemService = context.getSystemService(Context.NOTIFICATION_SERVICE);
