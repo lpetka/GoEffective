@@ -1,6 +1,5 @@
 package project.io.goeffective.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -34,8 +32,8 @@ public class TasksListFragment extends BaseFragment implements ITasksListView {
     private INavigator navigator;
     private TaskListAdapter taskListAdapter;
 
-    @InjectView(R.id.add_dummy_task_button)
-    Button addDummyTaskButton;
+    @InjectView(R.id.add_task_button)
+    Button addTaskButton;
 
     @InjectView(R.id.task_list)
     ListView taskList;
@@ -51,12 +49,10 @@ public class TasksListFragment extends BaseFragment implements ITasksListView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
-        navigator = new Navigator(getContext());
         ButterKnife.inject(this, view);
         taskList.setOnItemClickListener((parent, view1, position, id) -> {
             Task task = (Task) parent.getItemAtPosition(position);
             navigator.openTaskEditActivity(task);
-            Toast.makeText(getContext(), task.getName() + " " + task.getId(), Toast.LENGTH_SHORT).show();
         });
         taskListAdapter = new TaskListAdapter(getContext(), new TaskListModel());
         taskList.setAdapter(taskListAdapter);
@@ -65,24 +61,18 @@ public class TasksListFragment extends BaseFragment implements ITasksListView {
 
     @Override
     protected IPresenter createPresenter(BaseFragment baseFragment, Bundle savedInstanceState) {
+        navigator = new Navigator(getContext());
         return new TasksListPresenter(this, navigator, AndroidSchedulers.mainThread());
-    }
-
-    @Override
-    public void addDummyTask() {
-        databaseHandler.addTask(new Task("Dummy task"));
-        taskListAdapter.updateView();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         taskListAdapter.updateView();
-
     }
 
     @Override
-    public Observable addDummyTaskClick() {
-        return ViewObservable.clicks(addDummyTaskButton);
+    public Observable addTaskClick() {
+        return ViewObservable.clicks(addTaskButton);
     }
 }

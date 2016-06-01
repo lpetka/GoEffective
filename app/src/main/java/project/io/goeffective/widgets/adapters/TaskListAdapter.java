@@ -5,15 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
-import butterknife.OnClick;
-import dagger.Module;
-import dagger.Provides;
 import project.io.goeffective.R;
 import project.io.goeffective.models.ITaskListModel;
 import project.io.goeffective.utils.dbobjects.Task;
@@ -55,8 +50,7 @@ public class TaskListAdapter extends BaseAdapter {
         }
         TextView name = (TextView) convertView.findViewById(R.id.taskName);
         Task task = taskList.get(position);
-        String taskName = "Nazwa: " + task.getName() + " ID: " + task.getId();
-        name.setText(taskName);
+        name.setText(task.getName());
         return convertView;
     }
 

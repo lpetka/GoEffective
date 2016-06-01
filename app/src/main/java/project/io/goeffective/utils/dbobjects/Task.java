@@ -9,7 +9,7 @@ import java.util.List;
 public class Task implements Serializable{
     private final Integer id;
     private String name;
-    private boolean notification = false;
+    private boolean notification = true;
     private String note;
     private List<TaskStart> taskStartList = new ArrayList<>();
 

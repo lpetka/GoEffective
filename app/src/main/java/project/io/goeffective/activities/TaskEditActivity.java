@@ -1,11 +1,11 @@
 package project.io.goeffective.activities;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import javax.inject.Inject;
+import java.util.Calendar;
 
 import butterknife.InjectView;
 import project.io.goeffective.App;
@@ -13,9 +13,11 @@ import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.TaskEditPresenter;
-import project.io.goeffective.utils.DatabaseHandler;
 import project.io.goeffective.utils.dbobjects.Task;
+import project.io.goeffective.utils.dbobjects.TaskStart;
 import project.io.goeffective.views.ITaskEditView;
+import project.io.goeffective.widgets.WeekDayView;
+import project.io.goeffective.widgets.adapters.WeekDayListAdapter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.ViewObservable;
@@ -23,14 +25,21 @@ import rx.android.view.ViewObservable;
 public class TaskEditActivity extends BaseActivity implements ITaskEditView {
     private Task task;
 
-    @InjectView(R.id.task_name_input)
-    TextView taskNameInput;
+    @InjectView(R.id.task_edit_task_name)
+    EditText taskName;
 
     @InjectView(R.id.remove_task_button)
     Button removeTaskButton;
 
-    @Inject
-    DatabaseHandler databaseHandler;
+    @InjectView(R.id.save_task_button)
+    Button saveTaskButton;
+
+    @InjectView(R.id.task_edit_week_day_list_selector)
+    WeekDayView weekDayListSelector;
+
+    @InjectView(R.id.task_edit_note_input)
+    EditText noteInput;
+
 
     public TaskEditActivity() {
         super(R.layout.activity_edit_task);
@@ -39,14 +48,35 @@ public class TaskEditActivity extends BaseActivity implements ITaskEditView {
 
     @Override
     protected IPresenter createPresenter(BaseActivity baseActivity, Bundle savedInstanceState) {
-        return new TaskEditPresenter(this, AndroidSchedulers.mainThread());
+        return new TaskEditPresenter(this, AndroidSchedulers.mainThread(), this);
     }
 
     @Override
     protected void onViewReady() {
         this.task = (Task) getIntent().getSerializableExtra("task");
-        String taskName = task.getName() + " " + task.getId();
-        taskNameInput.setText(taskName);
+        updateView();
+    }
+
+    private void updateView() {
+        taskName.setText(task.getName(), TextView.BufferType.EDITABLE);
+        noteInput.setText(task.getNote(), TextView.BufferType.EDITABLE);
+        WeekDayListAdapter weekDayListAdapter = (WeekDayListAdapter) weekDayListSelector.getAdapter();
+        int checkedDay;
+        Calendar calendar;
+        for(TaskStart taskStart: task.getTaskStartList()) {
+            calendar = Calendar.getInstance();
+            calendar.setTime(taskStart.getStart());
+            checkedDay = (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7;
+            if(checkedDay < 0)
+                checkedDay += 7;
+            weekDayListAdapter.setChecked(checkedDay);
+        }
+        weekDayListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public Observable saveTaskButtonClick() {
+        return ViewObservable.clicks(saveTaskButton);
     }
 
     @Override
@@ -55,23 +85,27 @@ public class TaskEditActivity extends BaseActivity implements ITaskEditView {
     }
 
     @Override
-    public void removeTask() {
-        new AlertDialog.Builder(TaskEditActivity.this)
-                .setTitle("Usuwanie zadania")
-                .setMessage("Czy na pewno chcesz usunąć to zadanie?")
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    databaseHandler.removeTask(task);
-
-                    close();
-                })
-                .setNegativeButton(android.R.string.no, (dialog, which) -> {
-                    // do nothing
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+    public void close() {
+        this.finish();
     }
 
-    private void close() {
-        this.finish();
+    @Override
+    public Task getTask() {
+        return task;
+    }
+
+    @Override
+    public WeekDayView getWeekDayListSelector() {
+        return weekDayListSelector;
+    }
+
+    @Override
+    public EditText getTaskName() {
+        return taskName;
+    }
+
+    @Override
+    public EditText getNoteInput() {
+        return noteInput;
     }
 }

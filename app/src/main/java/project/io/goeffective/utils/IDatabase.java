@@ -18,4 +18,5 @@ public interface IDatabase {
     List<Boolean> getTaskHistory(Task task, Date date, int days);
     List<Boolean> getTaskHistoryUntilFalse(Task task, Date date);
     List<Boolean> getTaskHistoryUntilFalse(Task task, Date date, int minDays);
+    void clearDatabase();
 }
