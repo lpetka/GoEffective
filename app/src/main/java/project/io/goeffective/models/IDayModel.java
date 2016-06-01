@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface IDayModel {
     List<Boolean> getRandomHistory();
-    List<Task> getTodayTasks();
+    List<DayTaskModel> getTodayTasks();
 }

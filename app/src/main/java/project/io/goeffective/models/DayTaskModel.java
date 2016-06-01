@@ -3,16 +3,16 @@ package project.io.goeffective.models;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Task {
+public class DayTaskModel {
     private final String name;
     private final List<Boolean> history;
 
-    public Task(String name, List<Boolean> history) {
+    public DayTaskModel(String name, List<Boolean> history) {
         this.name = name;
         this.history = history;
     }
 
-    public Task(String name) {
+    public DayTaskModel(String name) {
         this(name, new LinkedList<>());
     }
 

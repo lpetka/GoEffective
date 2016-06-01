@@ -12,14 +12,14 @@ public class DayModel implements IDayModel {
     public DayModel() {
     }
 
-    public List<Task> getTodayTasks() {
-        List<Task> todayTasks = new LinkedList<>();
+    public List<DayTaskModel> getTodayTasks() {
+        List<DayTaskModel> todayDayTaskModels = new LinkedList<>();
         for (int i = 0; i < 5; i++) {
             List<Boolean> randomHistory = getRandomHistory();
-            Task task = new Task("Zadanie nr " + random.nextInt(99), randomHistory);
-            todayTasks.add(task);
+            DayTaskModel dayTaskModel = new DayTaskModel("Zadanie nr " + random.nextInt(99), randomHistory);
+            todayDayTaskModels.add(dayTaskModel);
         }
-        return todayTasks;
+        return todayDayTaskModels;
     }
 
     @NonNull
