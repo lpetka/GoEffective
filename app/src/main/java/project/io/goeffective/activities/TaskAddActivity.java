@@ -7,6 +7,7 @@ import android.widget.EditText;
 import butterknife.InjectView;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
+import project.io.goeffective.notifications.NotificationsUpdater;
 import project.io.goeffective.presenters.AddTaskPresenter;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.services.Navigator;
@@ -59,5 +60,6 @@ public class TaskAddActivity extends BaseActivity implements IAddTaskView {
     @Override
     public void close() {
         this.finish();
+        new NotificationsUpdater(this).updateNotification();
     }
 }

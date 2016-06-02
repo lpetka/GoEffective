@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import project.io.goeffective.App;
 import project.io.goeffective.R;
 import project.io.goeffective.activities.TaskEditActivity;
+import project.io.goeffective.notifications.NotificationsUpdater;
 import project.io.goeffective.utils.DatabaseHandler;
 import project.io.goeffective.utils.dbobjects.Task;
 import project.io.goeffective.utils.dbobjects.TaskStart;
@@ -85,6 +86,7 @@ public class TaskEditPresenter extends Presenter<ITaskEditView> {
         }
         task.setNote(noteInput.getText().toString());
         databaseHandler.updateTask(task);
+        new NotificationsUpdater(context).updateNotification();
     }
 
     private int validateData(EditText taskName, WeekDayView weekDayListSelector) {

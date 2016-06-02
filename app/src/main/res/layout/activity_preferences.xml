@@ -10,19 +10,19 @@
     tools:context="project.io.goeffective.activities.PreferencesActivity">
 
     <Switch
+        android:id="@+id/reminder_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/switch_show_notifications"
-        android:id="@+id/reminder_switch"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:checked="true" />
+        android:checked="true"
+        android:text="@string/switch_show_notifications" />
 
     <Button
+        android:id="@+id/clear_user_data_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_clear_user_data"
-        android:id="@+id/clear_user_data_button"
         android:layout_below="@+id/reminder_switch"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/button_clear_user_data" />
 </RelativeLayout>
