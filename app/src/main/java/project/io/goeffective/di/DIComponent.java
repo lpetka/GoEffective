@@ -5,6 +5,7 @@ import dagger.Component;
 import project.io.goeffective.App;
 import project.io.goeffective.activities.PreferencesActivity;
 import project.io.goeffective.activities.TaskEditActivity;
+import project.io.goeffective.fragments.CalendarFragment;
 import project.io.goeffective.fragments.TasksListFragment;
 import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.DayModel;
@@ -35,6 +36,7 @@ public interface DIComponent {
     void inject (PreferencesActivity preferencesActivity);
     void inject(PreferencesPresenter preferencesPresenter);
     void inject(NotificationsUpdater notificationsUpdater);
+    void inject(CalendarFragment calendarFragment);
     void inject(DayModel dayModel);
 
     DatabaseHandler provideDatabaseHandler();

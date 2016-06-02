@@ -7,21 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collection;
 import java.util.Date;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import project.io.goeffective.App;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseFragment;
 import project.io.goeffective.models.CalendarModel;
+import project.io.goeffective.notifications.NotificationsUpdater;
 import project.io.goeffective.presenters.CalendarPresenter;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.services.Navigator;
-import project.io.goeffective.utils.StringConstants;
+import project.io.goeffective.utils.DatabaseHandler;
+import project.io.goeffective.utils.dbobjects.Task;
 import project.io.goeffective.views.ICalendarView;
 import project.io.goeffective.widgets.CalendarView;
 
 public class CalendarFragment extends BaseFragment implements ICalendarView {
+    @Inject
+    DatabaseHandler databaseHandler;
+
     @InjectView(R.id.calendar_view)
     CalendarView calendarView;
 
@@ -31,6 +40,7 @@ public class CalendarFragment extends BaseFragment implements ICalendarView {
 
 
     public CalendarFragment() {
+        App.getComponent().inject(this);
     }
 
     @Nullable
@@ -40,8 +50,17 @@ public class CalendarFragment extends BaseFragment implements ICalendarView {
         ButterKnife.inject(this, view);
         navigator = new Navigator(getContext());
         calendarView.getGridView().setOnItemClickListener((parent, view1, position, id) -> {
-            Date date = (Date)parent.getAdapter().getItem(position);
-            navigator.openDayActivity(date);
+            Date date = (Date) parent.getAdapter().getItem(position);
+            final Collection<Task> calendarTasks = calendarView.getModel().getCalendarTasks();
+            if (calendarTasks.size() == 1) {
+                Task task = (Task) calendarTasks.toArray()[0];
+                boolean flag = databaseHandler.checkTaskStatusAtDate(task, date);
+                databaseHandler.setTaskStatusAtDate(date, task, !flag);
+                new NotificationsUpdater(getContext()).updateNotification();
+                calendarView.update();
+            } else {
+                navigator.openDayActivity(date);
+            }
         });
 
 

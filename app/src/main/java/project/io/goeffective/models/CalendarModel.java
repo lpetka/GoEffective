@@ -21,6 +21,10 @@ public class CalendarModel implements ICalendarModel {
     @Inject
     DatabaseHandler databaseHandler;
 
+    public Collection<Task> getCalendarTasks() {
+        return calendarTasks;
+    }
+
     private final Collection<Task> calendarTasks;
 
     public CalendarModel() {
