@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import project.io.goeffective.App;
+import project.io.goeffective.activities.PreferencesActivity;
 import project.io.goeffective.utils.DatabaseHandler;
 import project.io.goeffective.utils.dbobjects.Task;
 
@@ -32,17 +33,22 @@ public class NotificationsUpdater {
     }
 
     public void updateNotification() {
-        final Date currentDate = Calendar.getInstance().getTime();
-        final Pair<Date, List<Task>> nextDateTasksPair = databaseHandler.getNextNonemptyDayTasks(currentDate);
-        if (!nextDateTasksPair.second.isEmpty()) {
-            final Notification notification = taskNotificationCreator.createNotification(nextDateTasksPair.second);
-            notificationScheduler.cancelNotification();
-            if (nextDateTasksPair.first.getDate() == currentDate.getDate()) {
-                notificationManager.notify(TaskNotificationCreator.NOTIFICATION_ID, notification);
-            } else {
-                notificationManager.cancel(TaskNotificationCreator.NOTIFICATION_ID);
-                notificationScheduler.scheduleNotification(notification, nextDateTasksPair.first);
+        if(PreferencesActivity.isNotificationOn) {
+            final Date currentDate = Calendar.getInstance().getTime();
+            final Pair<Date, List<Task>> nextDateTasksPair = databaseHandler.getNextNonemptyDayTasks(currentDate);
+            if (!nextDateTasksPair.second.isEmpty()) {
+                final Notification notification = taskNotificationCreator.createNotification(nextDateTasksPair.second);
+                notificationScheduler.cancelNotification();
+                if (nextDateTasksPair.first.getDate() == currentDate.getDate()) {
+                    notificationManager.notify(TaskNotificationCreator.NOTIFICATION_ID, notification);
+                } else {
+                    notificationManager.cancel(TaskNotificationCreator.NOTIFICATION_ID);
+                    notificationScheduler.scheduleNotification(notification, nextDateTasksPair.first);
+                }
             }
+        } else {
+            notificationScheduler.cancelNotification();
+            notificationManager.cancel(TaskNotificationCreator.NOTIFICATION_ID);
         }
     }
 }
