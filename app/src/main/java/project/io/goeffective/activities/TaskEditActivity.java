@@ -11,6 +11,7 @@ import butterknife.InjectView;
 import project.io.goeffective.App;
 import project.io.goeffective.R;
 import project.io.goeffective.common.BaseActivity;
+import project.io.goeffective.notifications.NotificationsUpdater;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.TaskEditPresenter;
 import project.io.goeffective.utils.dbobjects.Task;
@@ -87,6 +88,7 @@ public class TaskEditActivity extends BaseActivity implements ITaskEditView {
     @Override
     public void close() {
         this.finish();
+        new NotificationsUpdater(this).updateNotification();
     }
 
     @Override
