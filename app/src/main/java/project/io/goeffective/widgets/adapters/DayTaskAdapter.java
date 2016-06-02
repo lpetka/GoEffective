@@ -33,12 +33,12 @@ public class DayTaskAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return dayTaskModels.size();
+        return tasks.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return dayTaskModels.get(i);
+        return tasks.get(i);
     }
 
     @Override
@@ -49,15 +49,15 @@ public class DayTaskAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        DayTaskModel dayTaskModel = dayTaskModels.get(i);
-        return createListItem(dayTaskModel);
+        Task task = tasks.get(i);
+        return createListItem(task);
     }
 
-    private View createListItem(DayTaskModel dayTaskModel) {
+    private View createListItem(Task task) {
         RelativeLayout layout = new RelativeLayout(context);
         layout.setPadding(16, 16, 16, 16);
 
-        View taskNameView = createTaskNameView(dayTaskModel);
+        View taskNameView = createTaskNameView(task);
         RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
@@ -71,17 +71,17 @@ public class DayTaskAdapter extends BaseAdapter {
         linearLayout.setLayoutParams(rightParams);
         linearLayout.setGravity(Gravity.CENTER);
 
-        View taskProgressView = createTaskProgressView(dayTaskModel);
+        View taskProgressView = createTaskProgressView(task);
         linearLayout.addView(taskProgressView);
 
-        View taskDaysInARowView = createTaskDaysInARowView(dayTaskModel);
+        View taskDaysInARowView = createTaskDaysInARowView(task);
         linearLayout.addView(taskDaysInARowView);
 
         layout.addView(linearLayout);
         return layout;
     }
 
-    private View createTaskProgressView(DayTaskModel dayTaskModel) {
+    private View createTaskProgressView(Task task) {
         LinearLayout linearLayout = new LinearLayout(context);
         List<Boolean> taskHistory = model.getHistory(task);
         final int size = taskHistory.size();
@@ -103,18 +103,18 @@ public class DayTaskAdapter extends BaseAdapter {
         return linearLayout;
     }
 
-    private View createTaskNameView(DayTaskModel dayTaskModel) {
+    private View createTaskNameView(Task task) {
         TextView textView = new TextView(context);
-        final String taskName = dayTaskModel.getName();
+        final String taskName = task.getName();
         textView.setText(taskName);
         textView.setTextSize(24);
         return textView;
     }
 
-    private View createTaskDaysInARowView(DayTaskModel dayTaskModel) {
+    private View createTaskDaysInARowView(Task task) {
         TextView textView = new TextView(context);
 
-        String historyLengthLabel = getDaysInARowLabel(dayTaskModel);
+        String historyLengthLabel = getDaysInARowLabel(task);
         textView.setText(historyLengthLabel);
         textView.setTextSize(24);
         textView.setPadding(16, 0, 16, 0);
