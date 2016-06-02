@@ -11,6 +11,7 @@ import project.io.goeffective.models.DayModel;
 import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.DayModel;
 import project.io.goeffective.models.TaskListModel;
+import project.io.goeffective.notifications.NotificationsUpdater;
 import project.io.goeffective.presenters.AddTaskPresenter;
 import project.io.goeffective.presenters.PreferencesPresenter;
 import project.io.goeffective.presenters.TaskEditPresenter;
@@ -33,6 +34,7 @@ public interface DIComponent {
     void inject (TaskEditPresenter taskEditPresenter);
     void inject (PreferencesActivity preferencesActivity);
     void inject(PreferencesPresenter preferencesPresenter);
+    void inject(NotificationsUpdater notificationsUpdater);
     void inject(DayModel dayModel);
 
     DatabaseHandler provideDatabaseHandler();
