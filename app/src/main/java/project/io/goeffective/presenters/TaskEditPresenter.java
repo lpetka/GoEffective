@@ -79,6 +79,7 @@ public class TaskEditPresenter extends Presenter<ITaskEditView> {
                 );
                 while (date.get(Calendar.DAY_OF_WEEK) != myDay)
                     date.add(Calendar.DATE, 1);
+                date.add(Calendar.DATE, -70);
                 task.addTaskStart(new TaskStart(date.getTime(), 7));
             }
         }

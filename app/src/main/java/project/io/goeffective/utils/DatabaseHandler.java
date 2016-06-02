@@ -231,8 +231,12 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     public List<Task> getTasksAtDate(Date date) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Task> list = new ArrayList<>();
-        String query = String.format("Select %s from %s where cast(julianday('%s') as int) - cast(%s as int) = 0;",
-                KEY_ID, TABLE_TASK_START, dateFormat.format(date), KEY_START);
+        String query = String.format("Select %s from %s where " +
+                "((cast(julianday('%s') as int) - cast(%s as int) + 1) %% %s = 0) and " +
+                "(cast(julianday('%s') as int) > cast(%s as int));",
+                KEY_TASK_ID, TABLE_TASK_START,
+                dateFormat.format(date), KEY_START, KEY_DELAY,
+                dateFormat.format(date), KEY_START);
         Cursor cursor = db.rawQuery(query, null);
 
         Set<Integer> task_id = new HashSet<>();
@@ -343,7 +347,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
             if(lastTaskDateList.isEmpty()){
                 return false;
             }
-            boolean taskAfterStart = false;
+            boolean taskAfterStart = true;
             for(int i = 0; i<lastTaskDateList.size(); i++){
                 taskAfterStart &= taskStartList.get(i).getStart().before(lastTaskDateList.get(i));
             }
