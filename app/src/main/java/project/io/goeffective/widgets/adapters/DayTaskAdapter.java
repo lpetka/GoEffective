@@ -16,6 +16,7 @@ import java.util.List;
 
 import project.io.goeffective.R;
 import project.io.goeffective.models.IDayModel;
+import project.io.goeffective.notifications.NotificationsUpdater;
 import project.io.goeffective.utils.dbobjects.Task;
 
 
@@ -136,5 +137,6 @@ public class DayTaskAdapter extends BaseAdapter {
         Task task = (Task) getItem(i);
         model.toggle(task);
         notifyDataSetChanged();
+        new NotificationsUpdater(context).updateNotification();
     }
 }
