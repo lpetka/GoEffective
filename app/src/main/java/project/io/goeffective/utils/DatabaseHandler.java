@@ -256,6 +256,29 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         return list;
     }
 
+    public Pair<Date, List<Task>> getNextNonemptyDayTasks(Date date) {
+        final List<Task> tasksList = getTasksList();
+        if (tasksList.isEmpty()) {
+            return new Pair<>(date, tasksList);
+        }
+
+        List<Task> tasks = new LinkedList<>();
+        List<Pair<Task, Boolean>> tasksStatusAtDate;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        while (tasks.isEmpty()) {
+            tasksStatusAtDate = getTasksStatusAtDate(calendar.getTime());
+            for (Pair<Task, Boolean> taskStatusPair : tasksStatusAtDate) {
+                if (!taskStatusPair.second) {
+                    tasks.add(taskStatusPair.first);
+                }
+            }
+            calendar.add(Calendar.DATE, 1);
+        }
+        calendar.add(Calendar.DATE, -1);
+        return new Pair<>(calendar.getTime(), tasks);
+    }
+
     @Override
     public void setTaskStatusAtDate(Date date, Task task, Boolean flag) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -292,7 +315,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         }
         return list;
     }
-    
+
     private class TaskDate {
         private List<TaskStart> taskStartList;
         private List<Date> lastTaskDateList;
