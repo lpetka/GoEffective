@@ -6,9 +6,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.preference.PreferenceActivity;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import project.io.goeffective.activities.PreferencesActivity;
 
 public class NotificationScheduler {
     private static AlarmManager alarmManager = null;
@@ -26,12 +29,6 @@ public class NotificationScheduler {
         final Intent notificationIntent = new Intent(context, NotificationPublisher.class);
         final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);
-    }
-
-    public void scheduleNotification(Notification notification, long delay) {
-        final PendingIntent pendingIntent = createNotificationIntent(notification);
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     public void scheduleNotification(Notification notification, Date futureDate) {
