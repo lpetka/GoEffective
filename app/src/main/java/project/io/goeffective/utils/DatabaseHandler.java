@@ -329,11 +329,10 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         }
 
         private Date getLastDate(Date date, TaskStart taskStart){
-            long diff = date.getTime() - taskStart.getStart().getTime();
-            long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            long diff = date.getTime() / (24*60*60*1000) - taskStart.getStart().getTime() / (24*60*60*1000);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
-            cal.add(Calendar.DAY_OF_MONTH, -((int)dayDiff%taskStart.getDelay()));
+            cal.add(Calendar.DAY_OF_MONTH, -((int)(diff%taskStart.getDelay())));
             return cal.getTime();
         }
 
@@ -352,7 +351,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
 
         public Date getPrevTaskDate(){
             Date lastDate = lastTaskDateList.get(0);
-            for(int i = 0; i<lastTaskDateList.size(); i++){
+            for(int i = 1; i<lastTaskDateList.size(); i++){
                 if(lastDate.before(lastTaskDateList.get(i))){
                     lastDate = lastTaskDateList.get(i);
                 }
@@ -381,7 +380,8 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         for(int i = 0; i<days; i++){
             if(taskDate.hasPrevDay()){
                 Date prev = taskDate.getPrevTaskDate();
-                history.add(checkTaskStatusAtDate(task, prev));
+                boolean flag = checkTaskStatusAtDate(task, prev);
+                history.add(flag);
             }
         }
         return history;
