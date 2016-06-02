@@ -11,13 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import project.io.goeffective.R;
 import project.io.goeffective.models.IDayModel;
 import project.io.goeffective.utils.dbobjects.Task;
-import project.io.goeffective.models.DayTaskModel;
-import project.io.goeffective.utils.dbobjects.Task;
+
 
 public class DayTaskAdapter extends BaseAdapter {
     static int MAX_HISTORY_LENGTH = 5;
@@ -84,6 +84,7 @@ public class DayTaskAdapter extends BaseAdapter {
     private View createTaskProgressView(Task task) {
         LinearLayout linearLayout = new LinearLayout(context);
         List<Boolean> taskHistory = model.getHistory(task);
+        Collections.reverse(taskHistory);
         final int size = taskHistory.size();
         if (size > MAX_HISTORY_LENGTH) {
             taskHistory = taskHistory.subList(size - MAX_HISTORY_LENGTH, size);

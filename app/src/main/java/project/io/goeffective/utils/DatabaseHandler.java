@@ -296,10 +296,9 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     private class TaskDate {
         private List<TaskStart> taskStartList;
         private List<Date> lastTaskDateList;
-        private Date date;
         public TaskDate(List<TaskStart> tlist, Date today){
             taskStartList = tlist;
-            date = (Date)today.clone();
+            Date date = (Date)today.clone();
             lastTaskDateList = new ArrayList<>(tlist.size());
             for (TaskStart taskStart: taskStartList) {
                 lastTaskDateList.add(getLastDate(date, taskStart));
@@ -307,7 +306,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         }
 
         private Date getLastDate(Date date, TaskStart taskStart){
-            long diff = taskStart.getStart().getTime() - date.getTime();
+            long diff = date.getTime() - taskStart.getStart().getTime();
             long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
@@ -336,9 +335,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
                 }
             }
             for(int i = 0; i<lastTaskDateList.size(); i++){
-                if(isSameDay(lastDate, lastTaskDateList.get(i))){
-                    lastTaskDateList.set(i, getPrevDate(lastTaskDateList.get(i), taskStartList.get(i)));
-                }
+                lastTaskDateList.set(i, getPrevDate(lastDate, taskStartList.get(i)));
             }
             return lastDate;
         }

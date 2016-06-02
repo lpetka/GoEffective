@@ -30,7 +30,7 @@ public class DayModel implements IDayModel {
 
     @NonNull
     public List<Boolean> getHistory(Task task) {
-        return databaseHandler.getTaskHistoryUntilFalse(task, date, MINIMUM_DAYS);
+        return databaseHandler.getTaskHistory(task, date, MINIMUM_DAYS);
     }
 
     public int countDaysInARow(Task task) {
