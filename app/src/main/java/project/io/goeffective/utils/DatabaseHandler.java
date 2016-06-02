@@ -387,7 +387,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         List<Boolean> history = new LinkedList<>();
         boolean prevDateGlobalStatus = true;
         int day = 0;
-        while (taskDate.hasPrevDay() && (prevDateGlobalStatus || day<minDays++)){
+        while (taskDate.hasPrevDay() && (prevDateGlobalStatus || minDays>day++)){
             Date prev = taskDate.getPrevTaskDate();
             boolean prevDateStatus = checkTaskStatusAtDate(db, task.getId(), prev);
             history.add(prevDateStatus);
