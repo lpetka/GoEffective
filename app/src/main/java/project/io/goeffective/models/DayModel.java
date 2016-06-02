@@ -2,33 +2,49 @@ package project.io.goeffective.models;
 
 import android.support.annotation.NonNull;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+
+import javax.inject.Inject;
+
+import project.io.goeffective.App;
+import project.io.goeffective.utils.DatabaseHandler;
+import project.io.goeffective.utils.dbobjects.Task;
 
 public class DayModel implements IDayModel {
-    private Random random = new Random();
+    private Date date;
+    private final int MINIMUM_DAYS = 7;
 
-    public DayModel() {
+    @Inject
+    DatabaseHandler databaseHandler;
+
+    public DayModel(Date date) {
+        this.date = date;
+        App.getComponent().inject(this);
     }
 
-    public List<DayTaskModel> getTodayTasks() {
-        List<DayTaskModel> todayDayTaskModels = new LinkedList<>();
-        for (int i = 0; i < 5; i++) {
-            List<Boolean> randomHistory = getRandomHistory();
-            DayTaskModel dayTaskModel = new DayTaskModel("Zadanie nr " + random.nextInt(99), randomHistory);
-            todayDayTaskModels.add(dayTaskModel);
-        }
-        return todayDayTaskModels;
+    public List<Task> getTodayTasks() {
+        return databaseHandler.getTasksAtDate(date);
     }
 
     @NonNull
-    public List<Boolean> getRandomHistory() {
-        List<Boolean> randomHistory = new LinkedList<>();
-        int historyLength = random.nextInt(10) + 1;
-        for (int j = 0; j < historyLength; j++) {
-            randomHistory.add(random.nextInt(5) != 0);
+    public List<Boolean> getHistory(Task task) {
+        return databaseHandler.getTaskHistoryUntilFalse(task, date, MINIMUM_DAYS);
+    }
+
+    public int countDaysInARow(Task task) {
+        List<Boolean> history = databaseHandler.getTaskHistoryUntilFalse(task, date);
+        int len = history.size();
+        if(len == 0)return 0;
+        if(!history.get(len-1)){
+            len-=1;
         }
-        return randomHistory;
+        return len;
+    }
+
+    public void toggle(Task task) {
+        boolean flag = databaseHandler.checkTaskStatusAtDate(task, date);
+        databaseHandler.setTaskStatusAtDate(date, task, !flag);
     }
 }

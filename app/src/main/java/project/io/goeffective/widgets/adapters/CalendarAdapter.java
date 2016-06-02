@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import project.io.goeffective.R;
 import project.io.goeffective.models.ICalendarModel;
@@ -49,7 +50,7 @@ public class CalendarAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return getDate(i).getTime();
     }
 
     @Override
@@ -107,7 +108,6 @@ public class CalendarAdapter extends BaseAdapter {
         textView.setHeight(70);
         textView.setTextSize(20);
         textView.setBackgroundColor(color);
-        textView.setOnClickListener(listener);
         return textView;
     }
 

@@ -15,45 +15,49 @@ import java.util.List;
 
 import project.io.goeffective.R;
 import project.io.goeffective.models.IDayModel;
+import project.io.goeffective.utils.dbobjects.Task;
 import project.io.goeffective.models.DayTaskModel;
+import project.io.goeffective.utils.dbobjects.Task;
 
 public class DayTaskAdapter extends BaseAdapter {
     static int MAX_HISTORY_LENGTH = 5;
-    List<DayTaskModel> dayTaskModels;
     private Context context;
+    private IDayModel model;
+    private List<Task> tasks;
 
     public DayTaskAdapter(Context context, IDayModel model) {
         this.context = context;
-        this.dayTaskModels = model.getTodayTasks();
+        this.tasks = model.getTodayTasks();
+        this.model = model;
     }
 
     @Override
     public int getCount() {
-        return dayTaskModels.size();
+        return tasks.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return dayTaskModels.get(i);
+        return tasks.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        DayTaskModel dayTaskModel = dayTaskModels.get(i);
-        return dayTaskModel.getName().hashCode();
+        Task task = tasks.get(i);
+        return task.getId();
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        DayTaskModel dayTaskModel = dayTaskModels.get(i);
-        return createListItem(dayTaskModel);
+        Task task = tasks.get(i);
+        return createListItem(task);
     }
 
-    private View createListItem(DayTaskModel dayTaskModel) {
+    private View createListItem(Task task) {
         RelativeLayout layout = new RelativeLayout(context);
         layout.setPadding(16, 16, 16, 16);
 
-        View taskNameView = createTaskNameView(dayTaskModel);
+        View taskNameView = createTaskNameView(task);
         RelativeLayout.LayoutParams leftParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
@@ -67,20 +71,19 @@ public class DayTaskAdapter extends BaseAdapter {
         linearLayout.setLayoutParams(rightParams);
         linearLayout.setGravity(Gravity.CENTER);
 
-        View taskProgressView = createTaskProgressView(dayTaskModel);
+        View taskProgressView = createTaskProgressView(task);
         linearLayout.addView(taskProgressView);
 
-        View taskDaysInARowView = createTaskDaysInARowView(dayTaskModel);
+        View taskDaysInARowView = createTaskDaysInARowView(task);
         linearLayout.addView(taskDaysInARowView);
 
         layout.addView(linearLayout);
         return layout;
     }
 
-    private View createTaskProgressView(DayTaskModel dayTaskModel) {
+    private View createTaskProgressView(Task task) {
         LinearLayout linearLayout = new LinearLayout(context);
-
-        List<Boolean> taskHistory = dayTaskModel.getHistory();
+        List<Boolean> taskHistory = model.getHistory(task);
         final int size = taskHistory.size();
         if (size > MAX_HISTORY_LENGTH) {
             taskHistory = taskHistory.subList(size - MAX_HISTORY_LENGTH, size);
@@ -100,18 +103,18 @@ public class DayTaskAdapter extends BaseAdapter {
         return linearLayout;
     }
 
-    private View createTaskNameView(DayTaskModel dayTaskModel) {
+    private View createTaskNameView(Task task) {
         TextView textView = new TextView(context);
-        final String taskName = dayTaskModel.getName();
+        final String taskName = task.getName();
         textView.setText(taskName);
         textView.setTextSize(24);
         return textView;
     }
 
-    private View createTaskDaysInARowView(DayTaskModel dayTaskModel) {
+    private View createTaskDaysInARowView(Task task) {
         TextView textView = new TextView(context);
 
-        String historyLengthLabel = getDaysInARowLabel(dayTaskModel);
+        String historyLengthLabel = getDaysInARowLabel(task);
         textView.setText(historyLengthLabel);
         textView.setTextSize(24);
         textView.setPadding(16, 0, 16, 0);
@@ -119,8 +122,8 @@ public class DayTaskAdapter extends BaseAdapter {
         return textView;
     }
 
-    private String getDaysInARowLabel(DayTaskModel dayTaskModel) {
-        final int daysInARow = dayTaskModel.countDaysInARow();
+    private String getDaysInARowLabel(Task task) {
+        final int daysInARow = model.countDaysInARow(task);
         String historyLengthLabel = "";
         if (daysInARow > 0) {
             historyLengthLabel = Integer.toString(daysInARow);
@@ -129,8 +132,8 @@ public class DayTaskAdapter extends BaseAdapter {
     }
 
     public void toggle(int i) {
-        DayTaskModel dayTaskModel = (DayTaskModel) getItem(i);
-        dayTaskModel.toggle();
+        Task task = (Task) getItem(i);
+        model.toggle(task);
         notifyDataSetChanged();
     }
 }

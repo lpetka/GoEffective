@@ -172,10 +172,11 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
         addTaskStart(db, task, task.getId());
     }
 
-    private Boolean checkTaskStatusAtDate(SQLiteDatabase db, Integer taskId, Date date){
+    public Boolean checkTaskStatusAtDate(Task task, Date date){
+        SQLiteDatabase db = this.getReadableDatabase();
         String query = String.format("Select %s from %s where %s = %s and cast(%s as int) = cast(julianday('%s') as int);",
                 KEY_TASK_ID, TABLE_TASK_DONE,
-                KEY_TASK_ID, String.valueOf(taskId), KEY_DATE, dateFormat.format(date));
+                KEY_TASK_ID, String.valueOf(task.getId()), KEY_DATE, dateFormat.format(date));
         Cursor cursor = db.rawQuery(query, null);
         return cursor.moveToFirst();
     }
@@ -183,10 +184,9 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     @Override
     public List<Pair<Task, Boolean>> getTasksStatusAtDate(Date date) {
         List<Task> tasks = getTasksAtDate(date);
-        SQLiteDatabase db = this.getReadableDatabase();
         List<Pair<Task, Boolean>> pairList = new ArrayList<>();
         for (Task task: tasks) {
-            Pair<Task, Boolean> pair= new Pair<>(task, checkTaskStatusAtDate(db, task.getId(), date));
+            Pair<Task, Boolean> pair= new Pair<>(task, checkTaskStatusAtDate(task, date));
             pairList.add(pair);
         }
         return pairList;
@@ -356,40 +356,37 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabase {
     }
 
     public List<Boolean> getTaskHistory(Task task, Date date, int days) {
-        SQLiteDatabase db = this.getReadableDatabase();
         TaskDate taskDate = new TaskDate(task.getTaskStartList(), date);
         List<Boolean> history = new LinkedList<>();
         for(int i = 0; i<days; i++){
             if(taskDate.hasPrevDay()){
                 Date prev = taskDate.getPrevTaskDate();
-                history.add(checkTaskStatusAtDate(db, task.getId(), prev));
+                history.add(checkTaskStatusAtDate(task, prev));
             }
         }
         return history;
     }
 
     public List<Boolean> getTaskHistoryUntilFalse(Task task, Date date){
-        SQLiteDatabase db = this.getReadableDatabase();
         TaskDate taskDate = new TaskDate(task.getTaskStartList(), date);
         List<Boolean> history = new LinkedList<>();
         boolean prevDateStatus = true;
         while (taskDate.hasPrevDay() && prevDateStatus){
             Date prev = taskDate.getPrevTaskDate();
-            prevDateStatus = checkTaskStatusAtDate(db, task.getId(), prev);
+            prevDateStatus = checkTaskStatusAtDate(task, prev);
             history.add(prevDateStatus);
         }
         return history;
     }
 
     public List<Boolean> getTaskHistoryUntilFalse(Task task, Date date, int minDays){
-        SQLiteDatabase db = this.getReadableDatabase();
         TaskDate taskDate = new TaskDate(task.getTaskStartList(), date);
         List<Boolean> history = new LinkedList<>();
         boolean prevDateGlobalStatus = true;
         int day = 0;
-        while (taskDate.hasPrevDay() && (prevDateGlobalStatus || day<minDays++)){
+        while (taskDate.hasPrevDay() && (prevDateGlobalStatus || minDays>day++)){
             Date prev = taskDate.getPrevTaskDate();
-            boolean prevDateStatus = checkTaskStatusAtDate(db, task.getId(), prev);
+            boolean prevDateStatus = checkTaskStatusAtDate(task, prev);
             history.add(prevDateStatus);
             prevDateGlobalStatus &= prevDateStatus;
         }

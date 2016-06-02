@@ -3,6 +3,9 @@ package project.io.goeffective.services;
 import android.content.Context;
 import android.content.Intent;
 
+import java.util.Date;
+
+import project.io.goeffective.activities.DayActivity;
 import project.io.goeffective.activities.PreferencesActivity;
 import project.io.goeffective.activities.TaskAddActivity;
 import project.io.goeffective.activities.TaskEditActivity;
@@ -31,4 +34,12 @@ public class Navigator implements INavigator {
         intent.putExtra("task", task);
         context.startActivity(intent);
     }
+
+    @Override
+    public void openDayActivity(Date date) {
+        Intent intent = new Intent(context, DayActivity.class);
+        intent.putExtra("date", date);
+        context.startActivity(intent);
+    }
+
 }
