@@ -44,6 +44,7 @@ public class DayModel implements IDayModel {
     }
 
     public void toggle(Task task) {
-
+        boolean flag = databaseHandler.checkTaskStatusAtDate(task, date);
+        databaseHandler.setTaskStatusAtDate(date, task, !flag);
     }
 }
