@@ -58,6 +58,12 @@ public class CalendarFragment extends BaseFragment implements ICalendarView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        calendarView.update();
+    }
+
+    @Override
     protected IPresenter createPresenter(BaseFragment baseFragment, Bundle savedInstanceState) {
         return new CalendarPresenter(this);
     }

@@ -179,7 +179,7 @@ public class CalendarView extends LinearLayout implements ICalendarChanger, ICal
         update();
     }
 
-    private void update(){
+    public void update(){
         setMonth(cal.get(Calendar.MONTH));
         CalendarAdapter calendarAdapter = new CalendarAdapter(context, cal, model);
         gridView.setAdapter(calendarAdapter);
