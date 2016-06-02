@@ -20,6 +20,7 @@ import project.io.goeffective.fragments.TasksListFragment;
 import project.io.goeffective.models.CalendarModel;
 import project.io.goeffective.models.ICalendarModel;
 import project.io.goeffective.models.TaskListModel;
+import project.io.goeffective.notifications.NotificationsUpdater;
 import project.io.goeffective.presenters.IPresenter;
 import project.io.goeffective.presenters.MainPresenter;
 import project.io.goeffective.services.Navigator;
@@ -58,6 +59,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         setupViewPager();
         tabLayout.setupWithViewPager(viewPager);
+        new NotificationsUpdater(this).updateNotification();
     }
 
     @Override
