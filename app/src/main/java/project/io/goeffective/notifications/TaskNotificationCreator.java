@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import java.util.Calendar;
 import java.util.List;
 
 import project.io.goeffective.R;
+import project.io.goeffective.activities.DayActivity;
 import project.io.goeffective.activities.MainActivity;
 import project.io.goeffective.utils.dbobjects.Task;
 
@@ -33,17 +35,19 @@ public class TaskNotificationCreator {
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(taskNotificationTitle);
         builder.setContentText(contentText.toString());
-        final PendingIntent pendingMainActivityIntent = getPendingMainActivityIntent();
+        final PendingIntent pendingMainActivityIntent = getPendingActivityIntent();
         builder.setContentIntent(pendingMainActivityIntent);
         builder.setSmallIcon(android.R.drawable.sym_def_app_icon);
         builder.setOngoing(true);
         return builder.build();
     }
 
-    private PendingIntent getPendingMainActivityIntent() {
-        final Intent intentToOpen = new Intent(context, MainActivity.class);
+    private PendingIntent getPendingActivityIntent() {
+        final Intent intentToOpen = new Intent(context, DayActivity.class);
+        intentToOpen.putExtra("date", Calendar.getInstance().getTime());
         final TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(new Intent(context, MainActivity.class));
         stackBuilder.addNextIntent(intentToOpen);
         return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
     }
