@@ -101,13 +101,11 @@ public class MainActivity extends BaseActivity implements IMainView {
                     ICalendarModel calendarModel;
                     if (which == 0) {
                         // user selected main calendar
-                        // TODO: show main calendar
                         calendarModel = new CalendarModel();
                     } else {
                         // user selected task calendar
                         final Task selectedTask = taskList.get(which - 1);
-                        // TODO: use selectedTask
-                        calendarModel = new CalendarModel();
+                        calendarModel = new CalendarModel(selectedTask);
                     }
                     calendarView.setModel(calendarModel);
                 })
