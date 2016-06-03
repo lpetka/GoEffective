@@ -105,7 +105,7 @@ public class CalendarAdapter extends BaseAdapter {
         TextView textView = new TextView(context);
         textView.setText(text);
         textView.setGravity(Gravity.CENTER);
-        textView.setHeight(70);
+        textView.setHeight(140);
         textView.setTextSize(20);
         textView.setBackgroundColor(color);
         return textView;
